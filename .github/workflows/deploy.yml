@@ -3,7 +3,7 @@ name: Deploy WithTail (devops/cicd)
 on:
   push:
     branches:
-      - devops/cicd
+      - develop
 
 jobs:
   deploy:
@@ -34,7 +34,7 @@ jobs:
           script_stop: true
           script: |
             cd /home/ubuntu/app
-            git pull origin devops/cicd
+            git pull origin develop
             docker compose down
             docker compose up -d --build
             docker image prune -f
