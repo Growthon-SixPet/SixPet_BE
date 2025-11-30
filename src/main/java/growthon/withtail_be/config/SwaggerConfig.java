@@ -21,7 +21,11 @@ public class SwaggerConfig {
                 .version("1.0")
                 .description("환영합니다!\n");
 
-        // HTTPS로 서버 URL 설정
+        // 서버 두 개 등록 (HTTP + HTTPS)
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("Local Server (HTTP)");
+
         Server httpsServer = new Server()
                 .url("https://withtail.duckdns.org")
                 .description("WithTail HTTPS Server");
@@ -40,7 +44,7 @@ public class SwaggerConfig {
         // Swagger UI 설정 및 보안 추가
         return new OpenAPI()
                 .info(info)
-                .servers(List.of(httpsServer))
+                .servers(List.of(localServer, httpsServer))
                 .components(components)
                 .addSecurityItem(securityRequirement);
     }
