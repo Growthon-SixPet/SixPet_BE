@@ -5,8 +5,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -17,6 +20,15 @@ public class SwaggerConfig {
                 .title("WithTail API Document")
                 .version("1.0")
                 .description("환영합니다!\n");
+
+        // 서버 두 개 등록 (HTTP + HTTPS)
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("Local Server (HTTP)");
+
+        Server httpsServer = new Server()
+                .url("https://withtail.duckdns.org")
+                .description("WithTail HTTPS Server");
 
         // JWT 인증 방식 설정
         String jwtScheme = "Authorization";
@@ -31,8 +43,9 @@ public class SwaggerConfig {
 
         // Swagger UI 설정 및 보안 추가
         return new OpenAPI()
-                .components(components)
                 .info(info)
+                .servers(List.of(localServer, httpsServer))
+                .components(components)
                 .addSecurityItem(securityRequirement);
     }
 }
