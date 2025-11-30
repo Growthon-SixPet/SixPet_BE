@@ -12,7 +12,7 @@ public class TestController {
     public BaseResponse<String> hello() {
         return BaseResponse.onSuccess(
                 SuccessStatus.OK,
-                "안녕하세요"
+                "안녕하세요!"
         );
     }
 }
