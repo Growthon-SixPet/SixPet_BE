@@ -21,6 +21,13 @@ public enum ErrorStatus implements BaseCode {
     AUTH_PROVIDER_MISMATCH(HttpStatus.BAD_REQUEST, "AUTH_400_1", "해당 계정은 이 로그인 방식으로 로그인할 수 없습니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "AUTH_401_4", "비밀번호가 올바르지 않습니다."),
 
+    // sms
+    SMS_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SMS_500_1", "인증 문자 발송에 실패했습니다."),
+    SMS_CODE_NOT_FOUND(HttpStatus.BAD_REQUEST, "SMS_400_1", "인증번호가 존재하지 않거나 만료되었습니다."),
+    SMS_CODE_MISMATCH(HttpStatus.BAD_REQUEST, "SMS_400_2", "인증번호가 일치하지 않습니다."),
+    SMS_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "SMS_400_3", "휴대폰 인증이 완료되지 않았습니다."),
+    SMS_TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "SMS_429_1", "인증 요청 횟수가 초과되었습니다."),
+
 
     // google
     GOOGLE_TOKEN_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "OAUTH_502_1", "구글 Access Token 요청에 실패했습니다."),

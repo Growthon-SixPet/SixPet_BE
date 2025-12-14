@@ -19,9 +19,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PhoneAuthService phoneAuthService;
 
     // 회원가입
     public UserInfoResDto localSignup(LocalSignupReqDto req) {
+
+        // 휴대폰 인증 완료 여부 체크
+        phoneAuthService.validateVerifiedPhone(req.phoneNumber());
 
         if (userRepository.existsByPhoneNumber(req.phoneNumber())) {
             throw new GeneralException(ErrorStatus.USER_PHONE_ALREADY_EXISTS);
@@ -42,7 +46,12 @@ public class UserService {
                 .profileImage(null)
                 .build();
 
-        return UserInfoResDto.from(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+
+        // 회원가입 성공 후 인증완료 키 삭제
+        phoneAuthService.clearVerifiedPhone(req.phoneNumber());
+
+        return UserInfoResDto.from(savedUser);
     }
 
 }

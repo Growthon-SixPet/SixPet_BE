@@ -8,7 +8,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -20,6 +20,12 @@ spring:
       client-id: ${GOOGLE_CLIENT_ID}
       client-secret: ${GOOGLE_CLIENT_SECRET}
       redirect-uri: https://withtail.duckdns.org/api/oauth2/callback/google
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 
 jwt:
   secret: ${JWT_SECRET}
@@ -37,3 +43,10 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+
+coolsms:
+  api:
+    key: ${COOLSMS_API_KEY}
+    secret: ${COOLSMS_API_SECRET}
+    domain: ${COOLSMS_DOMAIN}
+    from: ${COOLSMS_FROM}
