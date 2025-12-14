@@ -1,6 +1,6 @@
 package growthon.withtail_be.domain.user.service;
 
-import growthon.withtail_be.domain.user.dto.response.TokenDto;
+import growthon.withtail_be.domain.user.dto.token.TokenDto;
 import growthon.withtail_be.domain.user.entity.RefreshToken;
 import growthon.withtail_be.domain.user.entity.User;
 import growthon.withtail_be.domain.user.repository.RefreshTokenRepository;
@@ -35,7 +35,7 @@ public class TokenService {
             String refreshToken,
             Boolean keepLogin
     ) {
-        long days = Boolean.TRUE.equals(keepLogin) ? 14 : 7;
+        long days = Boolean.TRUE.equals(keepLogin) ? 30 : 7;
         LocalDateTime expiration = LocalDateTime.now().plusDays(days);
 
         return refreshTokenRepository.findByUser(user)
@@ -78,5 +78,21 @@ public class TokenService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         return tokenProvider.createAccessToken(user.getId());
+    }
+
+    // RefreshToken 삭제 (로그아웃)
+    public void logout(String refreshToken) {
+        // 이미 로그아웃 상태 → 그냥 종료
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return;
+        }
+
+        try {
+            Long userId = tokenProvider.getUserId(refreshToken);
+            refreshTokenRepository.deleteByUserId(userId);
+        } catch (Exception e) {
+            // 토큰이 깨졌거나 만료된 경우도 그냥 무시
+            // 로그아웃은 "정리" 목적이라 예외 던질 필요 없음
+        }
     }
 }

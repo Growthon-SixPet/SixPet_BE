@@ -2,9 +2,9 @@ package growthon.withtail_be.domain.user.service;
 
 import growthon.withtail_be.domain.user.dto.request.google.GoogleUserInfo;
 import growthon.withtail_be.domain.user.dto.request.social.SocialSignupReqDto;
-import growthon.withtail_be.domain.user.dto.response.TokenDto;
+import growthon.withtail_be.domain.user.dto.token.TokenDto;
 import growthon.withtail_be.domain.user.dto.response.UserInfoResDto;
-import growthon.withtail_be.domain.user.dto.response.loginHelperRes;
+import growthon.withtail_be.domain.user.dto.token.loginHelperRes;
 import growthon.withtail_be.domain.user.entity.Provider;
 import growthon.withtail_be.domain.user.entity.User;
 import growthon.withtail_be.domain.user.repository.UserRepository;
