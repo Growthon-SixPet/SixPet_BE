@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,12 @@ public class ReservationController {
     @GetMapping("/{reservationId}")
     public ResponseEntity<List<ReservationResDto>> getReservation(@PathVariable Long reservationId) {
         return ResponseEntity.status(HttpStatus.OK).body(reservationService.getReservation(reservationId));
+    }
+
+    @PatchMapping("/{reservationId}")
+    public ResponseEntity<ReservationResDto> updateReservation(@PathVariable Long reservationId, @RequestBody ReservationReqDto reservationReqDto) {
+        ReservationResDto updatedReservation = reservationService.updateReservation(reservationId, reservationReqDto);
+        return ResponseEntity.ok(updatedReservation);
     }
 
     @DeleteMapping("/{reservationId}")
