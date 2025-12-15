@@ -10,7 +10,11 @@ public enum SuccessStatus implements BaseCode {
 
     // Common
     OK(HttpStatus.OK, "COMMON_200", "성공입니다."),
-    CREATED(HttpStatus.CREATED, "COMMON_201", "등록이 성공적으로 완료되었습니다.");
+    CREATED(HttpStatus.CREATED, "COMMON_201", "등록이 성공적으로 완료되었습니다."),
+
+    // sms
+    PHONE_CODE_SENT(HttpStatus.OK, "SMS_200_1", "인증번호가 발송되었습니다."),
+    PHONE_CODE_VERIFIED(HttpStatus.OK, "SMS_200_2", "휴대폰 인증이 완료되었습니다.");
 
 
     private final HttpStatus httpStatus;

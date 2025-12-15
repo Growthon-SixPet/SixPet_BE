@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class GeneralException extends RuntimeException {
-    private BaseCode code;
-    private String message;
 
-    public GeneralException(BaseCode code, Throwable cause) {
-        super(code.getReasonHttpStatus().getMessage(), cause);
+    private final BaseCode code;
+
+    public GeneralException(BaseCode code) {
+        super(code.getMessage());
         this.code = code;
     }
 }
