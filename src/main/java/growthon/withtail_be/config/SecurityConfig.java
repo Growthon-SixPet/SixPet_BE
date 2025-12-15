@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/test/**"
                         ).permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
