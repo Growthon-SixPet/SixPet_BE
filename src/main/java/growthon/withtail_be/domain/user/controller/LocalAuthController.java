@@ -1,8 +1,6 @@
 package growthon.withtail_be.domain.user.controller;
 
-import growthon.withtail_be.domain.user.dto.request.local.LocalLoginReqDto;
-import growthon.withtail_be.domain.user.dto.request.local.LocalSignupReqDto;
-import growthon.withtail_be.domain.user.dto.response.UserInfoResDto;
+import growthon.withtail_be.domain.user.dto.request.create.local.LocalLoginReqDto;
 import growthon.withtail_be.domain.user.dto.token.AccessTokenDto;
 import growthon.withtail_be.domain.user.dto.token.loginHelperRes;
 import growthon.withtail_be.domain.user.service.AuthService;
@@ -31,12 +29,6 @@ public class LocalAuthController {
     private final UserService userService;
     private final AuthService authService;
     private final TokenService tokenService;
-
-    // LOCAL 회원가입
-    @PostMapping("/signup")
-    public BaseResponse<UserInfoResDto> signup(@RequestBody @Valid LocalSignupReqDto req) {
-        return BaseResponse.onSuccess(SuccessStatus.OK, userService.localSignup(req));
-    }
 
     // LOCAL 로그인
     @PostMapping("/login")

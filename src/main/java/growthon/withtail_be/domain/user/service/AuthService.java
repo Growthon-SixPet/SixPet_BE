@@ -1,6 +1,6 @@
 package growthon.withtail_be.domain.user.service;
 
-import growthon.withtail_be.domain.user.dto.request.local.LocalLoginReqDto;
+import growthon.withtail_be.domain.user.dto.request.create.local.LocalLoginReqDto;
 import growthon.withtail_be.domain.user.dto.token.TokenDto;
 import growthon.withtail_be.domain.user.dto.response.UserInfoResDto;
 import growthon.withtail_be.domain.user.dto.token.loginHelperRes;
