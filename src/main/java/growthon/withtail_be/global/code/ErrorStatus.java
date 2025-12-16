@@ -55,7 +55,15 @@ public enum ErrorStatus implements BaseCode {
     INTEREST_ACCESS_DENIED(HttpStatus.FORBIDDEN, "INTEREST_403_1", "해당 즐겨찾기에 접근할 권한이 없습니다."),
 
     HOSPITAL_NOT_FOUND(HttpStatus.NOT_FOUND, "HOSPITAL_404_1", "존재하지 않는 병원입니다."),
-    FUNERAL_NOT_FOUND(HttpStatus.NOT_FOUND, "FUNERAL_404_1", "존재하지 않는 장례식장입니다.");
+    FUNERAL_NOT_FOUND(HttpStatus.NOT_FOUND, "FUNERAL_404_1", "존재하지 않는 장례식장입니다."),
+
+    // reservation
+    RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "RESERVATION_404_1", "존재하지 않는 예약입니다."),
+    RESERVATION_ACCESS_DENIED(HttpStatus.FORBIDDEN, "RESERVATION_403_1", "해당 예약에 접근할 권한이 없습니다."),
+    RESERVATION_TIME_CONFLICT(HttpStatus.CONFLICT, "RESERVATION_409_1", "이미 예약된 시간입니다."),
+    RESERVATION_ALREADY_CANCELED(HttpStatus.CONFLICT, "RESERVATION_409_2", "이미 취소된 예약입니다."),
+    INVALID_RESERVATION_TARGET(HttpStatus.BAD_REQUEST, "RESERVATION_400_1", "유효하지 않은 예약 대상입니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

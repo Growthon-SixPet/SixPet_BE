@@ -29,8 +29,14 @@ public enum SuccessStatus implements BaseCode {
     INTEREST_CREATE_SUCCESS(HttpStatus.CREATED, "INTEREST_201_1", "즐겨찾기 생성 성공"),
     INTEREST_LIST_GET_SUCCESS(HttpStatus.OK, "INTEREST_200_1", "즐겨찾기 목록 조회 성공"),
     INTEREST_GET_SUCCESS(HttpStatus.OK, "INTEREST_200_2", "즐겨찾기 단건 조회 성공"),
-    INTEREST_DELETE_SUCCESS(HttpStatus.OK, "INTEREST_200_3", "즐겨찾기 삭제 성공");
+    INTEREST_DELETE_SUCCESS(HttpStatus.OK, "INTEREST_200_3", "즐겨찾기 삭제 성공"),
 
+    // reservation
+    RESERVATION_CREATE_SUCCESS(HttpStatus.CREATED, "RESERVATION_201_1", "예약 생성 성공"),
+    RESERVATION_LIST_GET_SUCCESS(HttpStatus.OK, "RESERVATION_200_1", "예약 목록 조회 성공"),
+    RESERVATION_GET_SUCCESS(HttpStatus.OK, "RESERVATION_200_2", "예약 단건 조회 성공"),
+    RESERVATION_UPDATE_SUCCESS(HttpStatus.OK, "RESERVATION_200_3", "예약 수정 성공"),
+    RESERVATION_CANCEL_SUCCESS(HttpStatus.OK, "RESERVATION_200_4", "예약 취소 성공");
 
 
     private final HttpStatus httpStatus;
