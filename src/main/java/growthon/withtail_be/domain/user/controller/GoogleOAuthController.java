@@ -1,6 +1,6 @@
 package growthon.withtail_be.domain.user.controller;
 
-import growthon.withtail_be.domain.user.dto.request.social.SocialSignupReqDto;
+import growthon.withtail_be.domain.user.dto.request.create.social.SocialSignupReqDto;
 import growthon.withtail_be.domain.user.dto.token.loginHelperRes;
 import growthon.withtail_be.domain.user.dto.response.loginResDto;
 import growthon.withtail_be.domain.user.service.GoogleOAuthService;
