@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,6 +65,25 @@ public class UserController {
         Long userId = Long.parseLong(authentication.getName());
         userService.updatePassword(userId, req);
         return BaseResponse.onSuccess(SuccessStatus.USER_PASSWORD_UPDATE_SUCCESS, null);
+    }
+
+    // 프로필 이미지 업로드/변경
+    @PatchMapping(value = "/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public BaseResponse<UserInfoResDto> updateProfileImage(
+            Authentication authentication,
+            @RequestPart("image") MultipartFile image
+    ) {
+        Long userId = Long.parseLong(authentication.getName());
+        UserInfoResDto res = userService.updateProfileImage(userId, image);
+        return BaseResponse.onSuccess(SuccessStatus.USER_PROFILE_IMAGE_UPDATE_SUCCESS, res);
+    }
+
+    // 프로필 이미지 삭제
+    @DeleteMapping("/profile/image")
+    public BaseResponse<UserInfoResDto> deleteProfileImage(Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        UserInfoResDto res = userService.deleteProfileImage(userId);
+        return BaseResponse.onSuccess(SuccessStatus.USER_PROFILE_IMAGE_DELETE_SUCCESS, res);
     }
 
     // 회원 탈퇴

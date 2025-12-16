@@ -31,12 +31,22 @@ public enum ErrorStatus implements BaseCode {
     // user
     PASSWORD_CONFIRM_MISMATCH(HttpStatus.BAD_REQUEST, "AUTH_400_2", "새 비밀번호와 비밀번호 확인이 일치하지 않습니다."),
 
+    // user profile image
+    PROFILE_IMAGE_REQUIRED(HttpStatus.BAD_REQUEST, "USER_400_3", "프로필 이미지 파일이 필요합니다."),
+    PROFILE_IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER_400_4", "삭제할 프로필 이미지가 존재하지 않습니다."),
+
     // google
     GOOGLE_TOKEN_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "OAUTH_502_1", "구글 Access Token 요청에 실패했습니다."),
     GOOGLE_TOKEN_PARSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "OAUTH_500_1", "구글 토큰 파싱에 실패했습니다."),
     GOOGLE_USERINFO_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "OAUTH_502_2", "구글 사용자 정보 요청에 실패했습니다."),
-    GOOGLE_USERINFO_PARSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "OAUTH_500_2", "구글 사용자 정보 파싱에 실패했습니다.");
+    GOOGLE_USERINFO_PARSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "OAUTH_500_2", "구글 사용자 정보 파싱에 실패했습니다."),
 
+    // s3
+    S3_FILE_EMPTY(HttpStatus.BAD_REQUEST, "S3_400_1", "업로드할 파일이 비어있습니다."),
+    S3_FILE_NAME_INVALID(HttpStatus.BAD_REQUEST, "S3_400_2", "파일명이 올바르지 않습니다."),
+    S3_URL_INVALID(HttpStatus.BAD_REQUEST, "S3_400_3", "S3 URL 형식이 올바르지 않습니다."),
+    S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_500_1", "S3 업로드에 실패했습니다."),
+    S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_500_2", "S3 삭제에 실패했습니다.");
 
 
     private final HttpStatus httpStatus;

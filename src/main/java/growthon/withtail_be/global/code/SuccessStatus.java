@@ -18,6 +18,9 @@ public enum SuccessStatus implements BaseCode {
     USER_PROFILE_UPDATE_SUCCESS(HttpStatus.OK, "USER_200_2", "회원 정보가 수정되었습니다."),
     USER_PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "USER_200_3", "비밀번호가 변경되었습니다."),
     USER_DELETE_SUCCESS(HttpStatus.OK, "USER_200_4", "회원 탈퇴가 완료되었습니다."),
+    USER_PROFILE_IMAGE_UPDATE_SUCCESS(HttpStatus.OK, "USER_200_5", "프로필 이미지가 변경되었습니다."),
+    USER_PROFILE_IMAGE_DELETE_SUCCESS(HttpStatus.OK, "USER_200_6", "프로필 이미지가 삭제되었습니다."),
+
 
 
     // sms
