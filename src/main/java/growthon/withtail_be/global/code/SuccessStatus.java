@@ -10,7 +10,27 @@ public enum SuccessStatus implements BaseCode {
 
     // Common
     OK(HttpStatus.OK, "COMMON_200", "성공입니다."),
-    CREATED(HttpStatus.CREATED, "COMMON_201", "등록이 성공적으로 완료되었습니다.");
+    CREATED(HttpStatus.CREATED, "COMMON_201", "등록이 성공적으로 완료되었습니다."),
+
+    // user
+    USER_SIGNUP_SUCCESS(HttpStatus.CREATED, "USER_201_1", "회원가입이 완료되었습니다."),
+    USER_PROFILE_GET_SUCCESS(HttpStatus.OK, "USER_200_1", "회원 정보를 조회했습니다."),
+    USER_PROFILE_UPDATE_SUCCESS(HttpStatus.OK, "USER_200_2", "회원 정보가 수정되었습니다."),
+    USER_PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "USER_200_3", "비밀번호가 변경되었습니다."),
+    USER_DELETE_SUCCESS(HttpStatus.OK, "USER_200_4", "회원 탈퇴가 완료되었습니다."),
+    USER_PROFILE_IMAGE_UPDATE_SUCCESS(HttpStatus.OK, "USER_200_5", "프로필 이미지가 변경되었습니다."),
+    USER_PROFILE_IMAGE_DELETE_SUCCESS(HttpStatus.OK, "USER_200_6", "프로필 이미지가 삭제되었습니다."),
+
+    // sms
+    PHONE_CODE_SENT(HttpStatus.OK, "SMS_200_1", "인증번호가 발송되었습니다."),
+    PHONE_CODE_VERIFIED(HttpStatus.OK, "SMS_200_2", "휴대폰 인증이 완료되었습니다."),
+
+    // interest
+    INTEREST_CREATE_SUCCESS(HttpStatus.CREATED, "INTEREST_201_1", "즐겨찾기 생성 성공"),
+    INTEREST_LIST_GET_SUCCESS(HttpStatus.OK, "INTEREST_200_1", "즐겨찾기 목록 조회 성공"),
+    INTEREST_GET_SUCCESS(HttpStatus.OK, "INTEREST_200_2", "즐겨찾기 단건 조회 성공"),
+    INTEREST_DELETE_SUCCESS(HttpStatus.OK, "INTEREST_200_3", "즐겨찾기 삭제 성공");
+
 
 
     private final HttpStatus httpStatus;
