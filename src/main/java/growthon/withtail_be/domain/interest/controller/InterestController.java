@@ -1,6 +1,6 @@
 package growthon.withtail_be.domain.interest.controller;
 
-import growthon.withtail_be.domain.interest.domain.TargetType;
+import growthon.withtail_be.domain.interest.domain.User;
 import growthon.withtail_be.domain.interest.dto.InterestReqDto;
 import growthon.withtail_be.domain.interest.dto.InterestResDto;
 import growthon.withtail_be.domain.interest.service.InterestService;
@@ -29,18 +29,18 @@ public class InterestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(interestService.postInterest(interestReqDto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<InterestResDto>> getAllInterest() {
-        return ResponseEntity.status(HttpStatus.OK).body(interestService.getAllInterest());
+    @GetMapping("/user/{user-id}")
+    public ResponseEntity<List<InterestResDto>> getInterestByUserId(@PathVariable("user-id") User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(interestService.getAllInterest(user.getId()));
     }
 
-    @GetMapping("/{targetType}")
-    public ResponseEntity<List<InterestResDto>> getInterestByTargetType(@PathVariable TargetType targetType) {
-        return ResponseEntity.status(HttpStatus.OK).body(interestService.getInterestByTargetType(targetType));
+    @GetMapping("/{interest-id}")
+    public ResponseEntity<InterestResDto> getInterestById(@PathVariable("interest-id") Long interestId) {
+        return ResponseEntity.status(HttpStatus.OK).body(interestService.getInterest(interestId));
     }
 
     @DeleteMapping("/{interest-id}")
-    public ResponseEntity<InterestResDto> deleteInterest(@PathVariable Long interestId) {
+    public ResponseEntity<Void> deleteInterest(@PathVariable("interest-id") Long interestId) {
         interestService.deleteInterest(interestId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

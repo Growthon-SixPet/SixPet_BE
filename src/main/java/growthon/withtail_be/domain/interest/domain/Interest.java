@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,8 +24,12 @@ public class Interest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long interestId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(nullable = false)
-    private LocalDate interestDate;
+    private LocalDateTime interestDate;
 
     @Enumerated(EnumType.STRING)
     private TargetType targetType;
@@ -38,15 +42,12 @@ public class Interest {
     @JoinColumn(name = "funeral_id")
     private Funeral funeral;
 
-    public Interest(LocalDate interestDate, TargetType targetType, Hospital hospital, Funeral funeral) {
+    public Interest(LocalDateTime interestDate, User user, TargetType targetType, Hospital hospital, Funeral funeral) {
         this.interestDate = interestDate;
+        this.user = user;
         this.targetType = targetType;
-
-        if(targetType == TargetType.HOSPITAL) {
-            this.hospital = hospital;
-        } else {
-            this.funeral = funeral;
-        }
+        this.hospital = hospital;
+        this.funeral = funeral;
     }
 
 }

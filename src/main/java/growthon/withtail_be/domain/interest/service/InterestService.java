@@ -4,16 +4,18 @@ import growthon.withtail_be.domain.interest.domain.Funeral;
 import growthon.withtail_be.domain.interest.domain.Hospital;
 import growthon.withtail_be.domain.interest.domain.Interest;
 import growthon.withtail_be.domain.interest.domain.TargetType;
+import growthon.withtail_be.domain.interest.domain.User;
 import growthon.withtail_be.domain.interest.dto.InterestReqDto;
 import growthon.withtail_be.domain.interest.dto.InterestResDto;
 import growthon.withtail_be.domain.interest.repository.FuneralRepository;
 import growthon.withtail_be.domain.interest.repository.HospitalRepository;
 import growthon.withtail_be.domain.interest.repository.InterestRepository;
+import growthon.withtail_be.domain.interest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,6 +23,7 @@ import java.util.List;
 public class InterestService {
     private final HospitalRepository hospitalRepository;
     private final FuneralRepository funeralRepository;
+    private final UserRepository userRepository;
     private final InterestRepository interestRepository;
 
     @Transactional
@@ -29,18 +32,32 @@ public class InterestService {
         Hospital hospital = null;
         Funeral funeral = null;
 
-        if(interestReqDto.getHospitalId() != null) {
-            hospital = hospitalRepository.findById(interestReqDto.getHospitalId())
-                    .orElseThrow(() -> new RuntimeException("Hospital not found"));
+        User user = userRepository.findById(interestReqDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if(interestReqDto.getTargetType() == TargetType.HOSPITAL) {
+            hospital = hospitalRepository.findById(interestReqDto.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Hospital not found"));
+
+            boolean exists = interestRepository.existsByUserAndHospital(user, hospital);
+            if (exists) {
+                throw new IllegalArgumentException("This interest already exists");
+            }
         }
 
-        if(interestReqDto.getFuneralId() != null) {
-            funeral = funeralRepository.findById(interestReqDto.getFuneralId())
-                    .orElseThrow(() -> new RuntimeException("Funeral not found"));
+        if(interestReqDto.getTargetType() == TargetType.FUNERAL) {
+            funeral = funeralRepository.findById(interestReqDto.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Funeral not found"));
+
+            boolean exists = interestRepository.existsByUserAndFuneral(user, funeral);
+            if (exists) {
+                throw new IllegalArgumentException("This interest already exists");
+            }
         }
 
         Interest interest = new Interest(
-                LocalDate.now(),
+                LocalDateTime.now(),
+                user,
                 interestReqDto.getTargetType(),
                 hospital,
                 funeral);
@@ -51,42 +68,26 @@ public class InterestService {
     }
 
     @Transactional(readOnly = true)
-    public List<InterestResDto> getAllInterest() {
-        return interestRepository.findAll()
+    public List<InterestResDto> getAllInterest(Long userId) {
+        return interestRepository.findByUserId(userId)
                 .stream()
-                .map(interest -> InterestResDto.builder()
-                        .interestId(interest.getInterestId())
-                        .hospitalName(
-                                interest.getHospital() != null ? interest.getHospital().getName() : null
-                        )
-                        .funeralName(
-                                interest.getFuneral() != null ? interest.getFuneral().getName() : null
-                        )
-                        .build())
+                .map(InterestResDto::from)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<InterestResDto> getInterestByTargetType(TargetType targetType) {
-        return interestRepository.findByTargetType(targetType)
-                .stream()
-                .map(interest -> InterestResDto.builder()
-                        .interestId(interest.getInterestId())
-                        .hospitalName(
-                                interest.getHospital() != null ? interest.getHospital().getName() : null
-                        )
-                        .funeralName(
-                                interest.getFuneral() != null ? interest.getFuneral().getName() : null
-                        )
-                        .build())
-                .toList();
+    public InterestResDto getInterest(Long interestId) {
+        Interest interest = interestRepository.findById(interestId)
+                .orElseThrow(() -> new RuntimeException("Interest not found"));
+
+        return InterestResDto.from(interest);
     }
 
     @Transactional
     public void deleteInterest(Long interestId) {
 
         Interest interest = interestRepository.findById(interestId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않은 즐겨찾기입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("Interest not found"));
 
         interestRepository.delete(interest);
     }
