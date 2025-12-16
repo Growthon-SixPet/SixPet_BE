@@ -14,9 +14,7 @@ import java.time.LocalDate;
 public class InterestResDto {
 
 private Long interestId;
-    private Long userId;
     private TargetType targetType;
-    private LocalDate interestDate;
     private Long targetId;
     private String targetName;
 
@@ -28,9 +26,7 @@ private Long interestId;
             Hospital hospital = interest.getHospital();
             targetId = hospital.getId();
             targetName = hospital.getName();
-        }
-
-        if (interest.getTargetType() == TargetType.FUNERAL) {
+        } else if (interest.getTargetType() == TargetType.FUNERAL) {
             Funeral funeral = interest.getFuneral();
             targetId = funeral.getId();
             targetName = funeral.getName();
@@ -38,9 +34,7 @@ private Long interestId;
 
         return InterestResDto.builder()
                     .interestId(interest.getInterestId())
-                    .userId(interest.getUser().getId())
                     .targetType(interest.getTargetType())
-                    .interestDate(LocalDate.now())
                     .targetId(targetId)
                     .targetName(targetName)
                     .build();

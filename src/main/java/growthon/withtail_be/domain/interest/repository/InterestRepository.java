@@ -3,7 +3,7 @@ package growthon.withtail_be.domain.interest.repository;
 import growthon.withtail_be.domain.interest.domain.Funeral;
 import growthon.withtail_be.domain.interest.domain.Hospital;
 import growthon.withtail_be.domain.interest.domain.Interest;
-import growthon.withtail_be.domain.interest.domain.User;
+import growthon.withtail_be.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

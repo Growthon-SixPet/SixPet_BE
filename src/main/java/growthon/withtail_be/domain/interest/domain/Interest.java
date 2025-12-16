@@ -1,5 +1,7 @@
 package growthon.withtail_be.domain.interest.domain;
 
+import growthon.withtail_be.domain.model.BaseEntity;
+import growthon.withtail_be.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Interest {
+public class Interest extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +29,6 @@ public class Interest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(nullable = false)
-    private LocalDateTime interestDate;
 
     @Enumerated(EnumType.STRING)
     private TargetType targetType;
@@ -42,8 +41,8 @@ public class Interest {
     @JoinColumn(name = "funeral_id")
     private Funeral funeral;
 
-    public Interest(LocalDateTime interestDate, User user, TargetType targetType, Hospital hospital, Funeral funeral) {
-        this.interestDate = interestDate;
+    public Interest(User user, TargetType targetType,
+                    Hospital hospital, Funeral funeral) {
         this.user = user;
         this.targetType = targetType;
         this.hospital = hospital;

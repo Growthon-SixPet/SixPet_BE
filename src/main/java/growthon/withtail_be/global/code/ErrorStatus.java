@@ -46,8 +46,16 @@ public enum ErrorStatus implements BaseCode {
     S3_FILE_NAME_INVALID(HttpStatus.BAD_REQUEST, "S3_400_2", "파일명이 올바르지 않습니다."),
     S3_URL_INVALID(HttpStatus.BAD_REQUEST, "S3_400_3", "S3 URL 형식이 올바르지 않습니다."),
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_500_1", "S3 업로드에 실패했습니다."),
-    S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_500_2", "S3 삭제에 실패했습니다.");
+    S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_500_2", "S3 삭제에 실패했습니다."),
 
+    // interest
+    INTEREST_NOT_FOUND(HttpStatus.NOT_FOUND, "INTEREST_404_1", "존재하지 않는 즐겨찾기입니다."),
+    INTEREST_ALREADY_EXISTS(HttpStatus.CONFLICT, "INTEREST_409_1", "이미 즐겨찾기에 추가된 항목입니다."),
+    INVALID_INTEREST_TARGET(HttpStatus.BAD_REQUEST, "INTEREST_400_1", "유효하지 않은 즐겨찾기 대상입니다."),
+    INTEREST_ACCESS_DENIED(HttpStatus.FORBIDDEN, "INTEREST_403_1", "해당 즐겨찾기에 접근할 권한이 없습니다."),
+
+    HOSPITAL_NOT_FOUND(HttpStatus.NOT_FOUND, "HOSPITAL_404_1", "존재하지 않는 병원입니다."),
+    FUNERAL_NOT_FOUND(HttpStatus.NOT_FOUND, "FUNERAL_404_1", "존재하지 않는 장례식장입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

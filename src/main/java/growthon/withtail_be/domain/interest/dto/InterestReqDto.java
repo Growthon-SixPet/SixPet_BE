@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class InterestReqDto {
-
     private TargetType targetType;
-
     private Long targetId;
-
-    private Long userId;
 }
