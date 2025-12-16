@@ -1,4 +1,4 @@
-package growthon.withtail_be.domain.user.dto.request.local;
+package growthon.withtail_be.domain.user.dto.request.create.local;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
