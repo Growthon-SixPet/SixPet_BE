@@ -6,10 +6,10 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
+@Getter
 @NoArgsConstructor
-public class Funeral {
+public class User {
 
     @Id
     private Long id;
@@ -17,7 +17,7 @@ public class Funeral {
     @Column(nullable = false)
     private String name;
 
-    public Funeral(Long id, String name) {
+    public User(Long id, String name) {
         this.id = id;
         this.name = name;
     }
