@@ -1,5 +1,8 @@
 package growthon.withtail_be.domain.reservation.dto;
 
+import growthon.withtail_be.domain.reservation.domain.TargetType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,16 +13,27 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class ReservationReqDto {
 
-    private Long userId;
+    @NotNull(message = "targetType은 필수입니다.")
+    private TargetType targetType;
 
-    private Long hospitalId;
+    @NotNull(message = "targetId는 필수입니다.")
+    private Long targetId;
 
+    @NotBlank(message = "보호자 이름은 필수입니다.")
+    private String ownerName;
+
+    @NotBlank(message = "연락처는 필수입니다.")
+    private String phoneNumber;
+
+    @NotBlank(message = "반려동물 이름은 필수입니다.")
+    private String petName;
+
+    @NotNull(message = "예약일은 필수입니다.")
     private LocalDate reservationDate;
+
+    @NotNull(message = "예약시간은 필수입니다.")
     private LocalTime reservationTime;
 
-    private String petName;
-    private Integer petAge;
-    private String petGender;
-
+    @NotNull(message = "방문사유를 적어주세요.")
     private String visitReason;
 }
