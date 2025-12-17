@@ -62,7 +62,14 @@ public enum ErrorStatus implements BaseCode {
     RESERVATION_ACCESS_DENIED(HttpStatus.FORBIDDEN, "RESERVATION_403_1", "해당 예약에 접근할 권한이 없습니다."),
     RESERVATION_TIME_CONFLICT(HttpStatus.CONFLICT, "RESERVATION_409_1", "이미 예약된 시간입니다."),
     RESERVATION_ALREADY_CANCELED(HttpStatus.CONFLICT, "RESERVATION_409_2", "이미 취소된 예약입니다."),
-    INVALID_RESERVATION_TARGET(HttpStatus.BAD_REQUEST, "RESERVATION_400_1", "유효하지 않은 예약 대상입니다.");
+    INVALID_RESERVATION_TARGET(HttpStatus.BAD_REQUEST, "RESERVATION_400_1", "유효하지 않은 예약 대상입니다."),
+
+    // review
+    REVIEW_TARGET_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW_404_1", "후기 대상이 존재하지 않습니다."),
+    REVIEW_ACCESS_DENIED(HttpStatus.FORBIDDEN, "REVIEW_403_1", "해당 후기에 대한 권한이 없습니다."),
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW_404_2", "존재하지 않는 후기입니다."),
+    REVIEW_IMAGE_REQUIRED(HttpStatus.BAD_REQUEST, "REVIEW_400_1", "후기 이미지 파일이 필요합니다."),
+    REVIEW_RATING_INVALID(HttpStatus.BAD_REQUEST, "REVIEW_400_2", "후기 평점은 1~5 사이여야 합니다.");
 
 
     private final HttpStatus httpStatus;

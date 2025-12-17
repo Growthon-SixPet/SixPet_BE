@@ -2,17 +2,37 @@ package growthon.withtail_be.domain.review.repository;
 
 import growthon.withtail_be.domain.review.entity.Review;
 import growthon.withtail_be.domain.review.entity.TargetType;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-// 대상(병원/장례) 기준으로 후기 조회
+import java.util.List;
+
+@Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    Page<Review> findByTargetTypeAndTargetId(
+    @EntityGraph(attributePaths = "user")
+    List<Review> findByTargetTypeAndTargetIdOrderByCreatedAtDesc(
             TargetType targetType,
-            Long targetId,
-            Pageable pageable
+            Long targetId
     );
+
+    @EntityGraph(attributePaths = "user")
+    List<Review> findByUserIdOrderByCreatedAtDesc(Long userId);
+
+    @Query("""
+        select coalesce(avg(r.rating), 0)
+        from Review r
+        where r.targetType = :targetType
+        and r.targetId = :targetId
+    """)
+    Double findAverageRating(TargetType targetType, Long targetId);
+
+    @Query("""
+        select count(r)
+        from Review r
+        where r.targetType = :targetType and r.targetId = :targetId
+    """)
+    Long countByTarget(TargetType targetType, Long targetId);
 }
