@@ -11,34 +11,37 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalTime;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "hospital_operating_hours")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalOperatingHours {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // MON, TUE ...
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
-    private DayOfWeekCode dayOfWeek;
+    @Column(nullable = false)
+    private DayOfWeekType dayOfWeek;
 
-    // 휴무면 null 가능
-    private LocalTime openTime;
-    private LocalTime closeTime;
+    // "09:00" 같은 문자열로도 충분 (테스트 단계)
+    private String openTime;
+    private String closeTime;
 
     @Column(nullable = false)
     private boolean closed;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id", nullable = false)
     private AnimalHospital hospital;
+
+    protected HospitalOperatingHours() {
+    }
+
+    public Long getId() { return id; }
+    public DayOfWeekType getDayOfWeek() { return dayOfWeek; }
+    public String getOpenTime() { return openTime; }
+    public String getCloseTime() { return closeTime; }
+    public boolean isClosed() { return closed; }
+    public AnimalHospital getHospital() { return hospital; }
 }

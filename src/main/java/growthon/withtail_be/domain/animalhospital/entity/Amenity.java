@@ -6,20 +6,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "amenities")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Amenity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(unique = true, nullable = false)
     private String name;
+
+    protected Amenity() {
+    }
+
+    public Long getId() { return id; }
+    public String getName() { return name; }
 }

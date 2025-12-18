@@ -9,43 +9,43 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "medical_staff")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MedicalStaff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 예: "김수의"
+    // 이름/직책/경력/학력/전문문구/이미지
     @Column(nullable = false)
     private String name;
 
-    // 예: "원장", "수의사"  (position 대신 role 사용)
-    @Column(nullable = false)
     private String role;
 
-    @Column(name = "career_years")
     private Integer careerYears;
 
-    // 예: "서울대 수의대 ..."
+    @Column(columnDefinition = "text")
     private String education;
 
-    // 예: "내과/외과"
-    @Column(name = "specialty_text")
     private String specialtyText;
 
-    // 테스트 단계에서는 null 가능
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
+    private String profileImageUrl; // 테스트 단계: null 가능
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id", nullable = false)
     private AnimalHospital hospital;
+
+    protected MedicalStaff() {
+    }
+
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public String getRole() { return role; }
+    public Integer getCareerYears() { return careerYears; }
+    public String getEducation() { return education; }
+    public String getSpecialtyText() { return specialtyText; }
+    public String getProfileImageUrl() { return profileImageUrl; }
+    public AnimalHospital getHospital() { return hospital; }
 }

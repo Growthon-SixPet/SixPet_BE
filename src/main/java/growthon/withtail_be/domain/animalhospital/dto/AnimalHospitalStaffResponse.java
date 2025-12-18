@@ -1,9 +1,7 @@
 package growthon.withtail_be.domain.animalhospital.dto;
 
 import growthon.withtail_be.domain.animalhospital.entity.MedicalStaff;
-import lombok.Getter;
 
-@Getter
 public class AnimalHospitalStaffResponse {
 
     private final Long id;
@@ -43,4 +41,12 @@ public class AnimalHospitalStaffResponse {
                 s.getProfileImageUrl()
         );
     }
+
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public String getRole() { return role; }
+    public Integer getCareerYears() { return careerYears; }
+    public String getEducation() { return education; }
+    public String getSpecialtyText() { return specialtyText; }
+    public String getProfileImageUrl() { return profileImageUrl; }
 }

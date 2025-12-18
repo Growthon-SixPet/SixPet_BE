@@ -9,33 +9,30 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
         name = "hospital_animal_types",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uk_hospital_animal_types",
-                columnNames = {"hospital_id", "animal_type_id"}
-        )
+        uniqueConstraints = @UniqueConstraint(name = "uk_hospital_animal_type", columnNames = {"hospital_id", "animal_type_id"})
 )
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalAnimalType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 병원 FK
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id", nullable = false)
     private AnimalHospital hospital;
 
-    // 동물종 FK
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_type_id", nullable = false)
     private AnimalType animalType;
+
+    protected HospitalAnimalType() {
+    }
+
+    public Long getId() { return id; }
+    public AnimalHospital getHospital() { return hospital; }
+    public AnimalType getAnimalType() { return animalType; }
 }

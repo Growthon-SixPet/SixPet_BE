@@ -1,6 +1,5 @@
 package growthon.withtail_be.domain.animalhospital.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -9,27 +8,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "hospital_images")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String imageUrl;
 
-    @Column(nullable = false)
-    private Integer sortOrder;
+    private boolean isMain;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id", nullable = false)
     private AnimalHospital hospital;
+
+    protected HospitalImage() {
+    }
+
+    public Long getId() { return id; }
+    public String getImageUrl() { return imageUrl; }
+    public boolean isMain() { return isMain; }
+    public AnimalHospital getHospital() { return hospital; }
 }

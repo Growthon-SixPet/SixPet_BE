@@ -5,11 +5,10 @@ import growthon.withtail_be.domain.animalhospital.dto.AnimalHospitalDetailRespon
 import growthon.withtail_be.domain.animalhospital.dto.AnimalHospitalSearchResponse;
 import growthon.withtail_be.domain.animalhospital.dto.AnimalHospitalStaffResponse;
 import growthon.withtail_be.domain.animalhospital.service.AnimalHospitalService;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,26 +22,37 @@ public class AnimalHospitalController {
 
     private final AnimalHospitalService animalHospitalService;
 
-    // GET /api/animal-hospitals?keyword=&sido=&sigungu=&open24h=&emergencyAvailable=&specialtyIds=1&specialtyIds=2...
+    // 병원 검색(필터) - 단일 엔드포인트
     @GetMapping
     public Page<AnimalHospitalSearchResponse> search(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String sido,
             @RequestParam(required = false) String sigungu,
             @RequestParam(required = false) Boolean open24h,
+            @RequestParam(required = false) Boolean nightCare,
             @RequestParam(required = false) Boolean emergencyAvailable,
             @RequestParam(required = false) List<Long> specialtyIds,
             @RequestParam(required = false) List<Long> animalTypeIds,
             @RequestParam(required = false) List<Long> amenityIds,
             @RequestParam(required = false) List<Long> paymentMethodIds,
-            @RequestParam(required = false) String sort,
-            @PageableDefault(size = 10) Pageable pageable
+            @RequestParam(required = false) String sortType,
+            @Parameter(description = "0부터 시작") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "기본 10") @RequestParam(defaultValue = "10") int size
     ) {
         return animalHospitalService.search(
-                keyword, sido, sigungu,
-                open24h, emergencyAvailable,
-                specialtyIds, animalTypeIds, amenityIds, paymentMethodIds,
-                sort, pageable
+                keyword,
+                sido,
+                sigungu,
+                open24h,
+                nightCare,
+                emergencyAvailable,
+                specialtyIds,
+                animalTypeIds,
+                amenityIds,
+                paymentMethodIds,
+                sortType,
+                page,
+                size
         );
     }
 
