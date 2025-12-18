@@ -5,10 +5,9 @@ import growthon.withtail_be.domain.reservation.dto.ReservationResDto;
 import growthon.withtail_be.domain.reservation.service.ReservationService;
 import growthon.withtail_be.global.code.SuccessStatus;
 import growthon.withtail_be.global.response.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +29,12 @@ public class ReservationController {
 
     // 예약 생성
     @PostMapping
+    @Operation(
+            summary = "신규 예약 생성",
+            description = "병원/장례의 정보(예약을 생성하려는 타입과 해당 타입의 id)와" +
+                    "보호자 정보(이름과 전화번호), 반려동물 이름, 방문 정보(날짜, 시간, 사유)를 받아서" +
+                    "신규 예약을 생성합니다."
+    )
     public BaseResponse<ReservationResDto> postReservation(
             Authentication authentication,
             @Valid @RequestBody ReservationReqDto dto
@@ -41,6 +46,10 @@ public class ReservationController {
 
     // 유저별 예약 조회
     @GetMapping("/user")
+    @Operation(
+            summary = "유저별 예약 조회",
+            description = "유저 id를 받아서 해당 유저가 생성한 예약 목록을 조회합니다."
+    )
     public BaseResponse<List<ReservationResDto>> getMyReservations(
             Authentication authentication
     ) {
@@ -51,6 +60,10 @@ public class ReservationController {
 
     // 예약 단건 조회
     @GetMapping("/{reservation-id}")
+    @Operation(
+            summary = "예약 단건 조회",
+            description = "예약 id를 받아서 해당 예약을 조회합니다."
+    )
     public BaseResponse<ReservationResDto> getReservation(
             Authentication authentication,
             @PathVariable("reservation-id") Long reservationId
@@ -62,6 +75,10 @@ public class ReservationController {
 
     // 예약 수정
     @PatchMapping("/{reservation-id}")
+    @Operation(
+            summary = "예약 수정",
+            description = "예약 id과 수정할 정보를 받아서 해당 예약의 정보를 수정합니다."
+    )
     public BaseResponse<ReservationResDto> updateReservation(
             Authentication authentication,
             @PathVariable("reservation-id") Long reservationId,
@@ -74,6 +91,10 @@ public class ReservationController {
 
     // 예약 취소
     @DeleteMapping("/{reservation-id}")
+    @Operation(
+            summary = "예약 취소",
+            description = "예약 id를 받아서 해당 예약을 삭제합니다."
+    )
     public BaseResponse<ReservationResDto> cancelReservation(
             Authentication authentication,
             @PathVariable("reservation-id") Long reservationId
