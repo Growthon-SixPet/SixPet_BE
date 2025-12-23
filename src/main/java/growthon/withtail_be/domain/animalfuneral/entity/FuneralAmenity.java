@@ -25,12 +25,12 @@ public class FuneralAmenity {
     // N:1 (링크 -> 제공 서비스 마스터)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amenity_id", nullable = false)
-    private Amenity amenity;
+    private FuneralAmenityItem funeralAmenityItem;
 
     protected FuneralAmenity() {
     }
 
     public Long getId() { return id; }
     public AnimalFuneral getFuneral() { return funeral; }
-    public Amenity getAmenity() { return amenity; }
+    public FuneralAmenityItem getAmenity() { return funeralAmenityItem; }
 }

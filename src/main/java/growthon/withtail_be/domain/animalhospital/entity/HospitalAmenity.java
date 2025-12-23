@@ -27,12 +27,12 @@ public class HospitalAmenity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amenity_id", nullable = false)
-    private Amenity amenity;
+    private HospitalAmenityItem hospitalAmenityItem;
 
     protected HospitalAmenity() {
     }
 
     public Long getId() { return id; }
     public AnimalHospital getHospital() { return hospital; }
-    public Amenity getAmenity() { return amenity; }
+    public HospitalAmenityItem getAmenity() { return hospitalAmenityItem; }
 }

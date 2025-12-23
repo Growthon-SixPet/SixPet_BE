@@ -1,4 +1,4 @@
-package growthon.withtail_be.domain.animalfuneral.entity;
+package growthon.withtail_be.domain.animalhospital.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,17 +8,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "amenities")
-public class Amenity {
+public class HospitalAmenityItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String name;
 
-    protected Amenity() {
+    protected HospitalAmenityItem() {
     }
 
     public Long getId() { return id; }
