@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
+import java.util.Collections;
 import java.util.Date;
 
 @Slf4j
@@ -77,7 +78,8 @@ public class TokenProvider {
 
         return new UsernamePasswordAuthenticationToken(
                 claims.getSubject(),
-                null
+                null,
+                Collections.emptyList()
         );
     }
 

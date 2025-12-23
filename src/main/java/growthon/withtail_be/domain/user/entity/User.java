@@ -56,4 +56,29 @@ public class User extends BaseEntity {
         this.address = address;
         this.profileImage = profileImage;
     }
+
+    // 기본 프로필 정보 수정 (이름 / 닉네임 / 생년월일 / 성별 / 주소)
+    public void updateProfile(
+            String name,
+            String nickname,
+            LocalDate birthDate,
+            Gender gender,
+            String address
+    ) {
+        this.name = name;
+        this.nickname = nickname;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.address = address;
+    }
+
+    // 비밀번호 변경
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    // 프로필 이미지 변경 (S3 연동 시 사용)
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }

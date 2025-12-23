@@ -1,11 +1,12 @@
 package growthon.withtail_be.domain.user.controller;
 
-import growthon.withtail_be.domain.user.dto.request.social.SocialSignupReqDto;
+import growthon.withtail_be.domain.user.dto.request.create.social.SocialSignupReqDto;
 import growthon.withtail_be.domain.user.dto.token.loginHelperRes;
 import growthon.withtail_be.domain.user.dto.response.loginResDto;
 import growthon.withtail_be.domain.user.service.GoogleOAuthService;
 import growthon.withtail_be.global.code.SuccessStatus;
 import growthon.withtail_be.global.response.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,16 @@ public class GoogleOAuthController {
     private final GoogleOAuthService googleOAuthService;
 
     @PostMapping("/loginOrSingUp")
+    @Operation(
+            summary = "구글 OAuth 로그인/회원가입",
+            description = """
+                구글 OAuth 인가 코드를 이용해 로그인 또는 회원가입을 처리합니다.
+                
+                - 최초 로그인 시: 추가 사용자 정보(SocialSignupReqDto)를 받아 회원가입 진행
+                - 기존 회원인 경우: 로그인 처리만 수행
+                - 응답으로 Access Token을 반환하고, Refresh Token은 HttpOnly 쿠키로 설정됩니다.
+                """
+    )
     public BaseResponse<loginResDto> loginOrSingUp (
             @RequestParam("code") String code,
             @RequestBody @Valid SocialSignupReqDto req,
