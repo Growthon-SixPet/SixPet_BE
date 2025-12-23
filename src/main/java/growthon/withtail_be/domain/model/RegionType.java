@@ -1,4 +1,4 @@
-package growthon.withtail_be.domain.animalhospital.entity;
+package growthon.withtail_be.domain.model;
 
 import lombok.Getter;
 

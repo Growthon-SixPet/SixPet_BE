@@ -1,37 +1,33 @@
 package growthon.withtail_be.domain.animalfuneral.entity;
 
 import growthon.withtail_be.domain.model.Amenity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "funeral_amenities")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FuneralAmenity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // N:1 (링크 -> 장례식장)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funeral_id", nullable = false)
     private AnimalFuneral funeral;
 
-    // N:1 (링크 -> 제공 서비스 마스터)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amenity_id", nullable = false)
-    private FuneralAmenityItem funeralAmenityItem;
+    private Amenity amenity;
 
-    protected FuneralAmenity() {
+    @Builder
+    public FuneralAmenity(AnimalFuneral funeral, Amenity amenity) {
+        this.funeral = funeral;
+        this.amenity = amenity;
     }
-
-    public Long getId() { return id; }
-    public AnimalFuneral getFuneral() { return funeral; }
-    public FuneralAmenityItem getAmenity() { return funeralAmenityItem; }
 }

@@ -6,7 +6,7 @@ import growthon.withtail_be.domain.animalhospital.dto.response.AnimalHospitalSea
 import growthon.withtail_be.domain.animalhospital.dto.response.HospitalNewsResDto;
 import growthon.withtail_be.domain.animalhospital.dto.response.HospitalOperatingHoursResDto;
 import growthon.withtail_be.domain.animalhospital.dto.response.MedicalStaffResDto;
-import growthon.withtail_be.domain.animalhospital.entity.RegionType;
+import growthon.withtail_be.domain.model.RegionType;
 import growthon.withtail_be.domain.animalhospital.service.AnimalHospitalService;
 import growthon.withtail_be.global.code.SuccessStatus;
 import growthon.withtail_be.global.response.BaseResponse;

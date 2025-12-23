@@ -1,5 +1,6 @@
 package growthon.withtail_be.domain.animalhospital.entity;
 
+import growthon.withtail_be.domain.model.RegionType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

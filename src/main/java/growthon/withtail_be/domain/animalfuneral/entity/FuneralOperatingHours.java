@@ -11,16 +11,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "funeral_operating_hours")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FuneralOperatingHours {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // N:1
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funeral_id", nullable = false)
     private AnimalFuneral funeral;
@@ -30,25 +35,26 @@ public class FuneralOperatingHours {
     private DayOfWeekType dayOfWeek;
 
     @Column(nullable = false)
+    private boolean closed;
+
+    @Column(length = 10)
     private String openTime;   // "09:30"
 
-    @Column(nullable = false)
+    @Column(length = 10)
     private String closeTime;  // "20:30"
 
-    // 예: "11:30-12:00" (없으면 null)
-    private String breakTime;
-
-    // 예: "20:00 접수마감" 같은 문구(없으면 null)
-    private String note;
-
-    protected FuneralOperatingHours() {
+    @Builder
+    public FuneralOperatingHours(
+            AnimalFuneral funeral,
+            DayOfWeekType dayOfWeek,
+            boolean closed,
+            String openTime,
+            String closeTime
+    ) {
+        this.funeral = funeral;
+        this.dayOfWeek = dayOfWeek;
+        this.closed = closed;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
     }
-
-    public Long getId() { return id; }
-    public AnimalFuneral getFuneral() { return funeral; }
-    public DayOfWeekType getDayOfWeek() { return dayOfWeek; }
-    public String getOpenTime() { return openTime; }
-    public String getCloseTime() { return closeTime; }
-    public String getBreakTime() { return breakTime; }
-    public String getNote() { return note; }
 }
