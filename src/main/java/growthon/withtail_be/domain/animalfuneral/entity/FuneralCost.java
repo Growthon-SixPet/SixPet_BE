@@ -9,31 +9,39 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "funeral_costs")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FuneralCost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // N:1
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funeral_id", nullable = false)
     private AnimalFuneral funeral;
 
     @Column(nullable = false)
-    private String name; // "베이직 장례(소형)"
+    private String name;
 
     @Column(nullable = false)
-    private int price; // 350000
+    private int price;
 
-    protected FuneralCost() {
+    @Builder
+    public FuneralCost(
+            AnimalFuneral funeral,
+            String name,
+            int price
+    ) {
+        this.funeral = funeral;
+        this.name = name;
+        this.price = price;
     }
-
-    public Long getId() { return id; }
-    public AnimalFuneral getFuneral() { return funeral; }
-    public String getName() { return name; }
-    public int getPrice() { return price; }
 }

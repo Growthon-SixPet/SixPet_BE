@@ -1,7 +1,7 @@
 package growthon.withtail_be.domain.animalhospital.repository;
 
 import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
-import growthon.withtail_be.domain.animalhospital.entity.RegionType;
+import growthon.withtail_be.domain.model.RegionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;

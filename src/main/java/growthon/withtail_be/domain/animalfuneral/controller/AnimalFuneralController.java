@@ -1,76 +1,59 @@
 package growthon.withtail_be.domain.animalfuneral.controller;
 
-import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralBasicResponse;
-import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralBrandResponse;
-import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralCostsResponse;
-import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralProceduresResponse;
-import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralSearchResponse;
+import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralBlissStoneResDto;
+import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralDetailResDto;
+import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralProcedureResDto;
+import growthon.withtail_be.domain.animalfuneral.dto.AnimalFuneralSearchResDto;
 import growthon.withtail_be.domain.animalfuneral.service.AnimalFuneralService;
-import java.util.List;
+import growthon.withtail_be.global.code.SuccessStatus;
+import growthon.withtail_be.global.response.BaseResponse;
+import growthon.withtail_be.domain.model.RegionType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/animal-funerals")
+@RequiredArgsConstructor
+@RequestMapping("/funerals")
 public class AnimalFuneralController {
 
     private final AnimalFuneralService animalFuneralService;
 
-    public AnimalFuneralController(AnimalFuneralService animalFuneralService) {
-        this.animalFuneralService = animalFuneralService;
-    }
-
-    // 검색(필터) - 하나의 엔드포인트로 리스트 한번에
+    // 장례식장 검색(목록)
     @GetMapping
-    public Page<AnimalFuneralSearchResponse> search(
+    public BaseResponse<Page<AnimalFuneralSearchResDto>> search(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String sido,
-            @RequestParam(required = false) String sigungu,
+            @RequestParam(required = false) RegionType region,
             @RequestParam(required = false) Integer minCost,
             @RequestParam(required = false) Integer maxCost,
             @RequestParam(required = false) Boolean blissStoneAvailable,
-            @RequestParam(required = false) List<Long> amenityIds,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return animalFuneralService.search(
-                keyword,
-                sido,
-                sigungu,
-                minCost,
-                maxCost,
-                blissStoneAvailable,
-                amenityIds,
-                page,
-                size
-        );
+        Page<AnimalFuneralSearchResDto> result =
+                animalFuneralService.search(keyword, region, minCost, maxCost, blissStoneAvailable, page, size);
+
+        return BaseResponse.onSuccess(SuccessStatus.FUNERAL_LIST_GET_SUCCESS, result);
     }
 
-    // 상세(기본)
+    // 장례식장 상세(공통 탭)
     @GetMapping("/{id}")
-    public AnimalFuneralBasicResponse basic(@PathVariable Long id) {
-        return animalFuneralService.getBasic(id);
+    public BaseResponse<AnimalFuneralDetailResDto> getDetail(@PathVariable("id") Long id) {
+        AnimalFuneralDetailResDto result = animalFuneralService.getDetail(id);
+        return BaseResponse.onSuccess(SuccessStatus.FUNERAL_DETAIL_GET_SUCCESS, result);
     }
 
-    // 상세(브랜드 소개)
-    @GetMapping("/{id}/brand")
-    public AnimalFuneralBrandResponse brand(@PathVariable Long id) {
-        return animalFuneralService.getBrand(id);
-    }
-
-    // 상세(장례 절차)
+    // 장례 절차(서비스) 탭
     @GetMapping("/{id}/procedures")
-    public AnimalFuneralProceduresResponse procedures(@PathVariable Long id) {
-        return animalFuneralService.getProcedures(id);
+    public BaseResponse<AnimalFuneralProcedureResDto> getProcedures(@PathVariable("id") Long id) {
+        AnimalFuneralProcedureResDto result = animalFuneralService.getProcedures(id);
+        return BaseResponse.onSuccess(SuccessStatus.FUNERAL_PROCEDURE_GET_SUCCESS, result);
     }
 
-    // 상세(장례 비용)
-    @GetMapping("/{id}/costs")
-    public AnimalFuneralCostsResponse costs(@PathVariable Long id) {
-        return animalFuneralService.getCosts(id);
+    // 메모리얼 스톤 탭
+    @GetMapping("/{id}/bliss-stone")
+    public BaseResponse<AnimalFuneralBlissStoneResDto> getBlissStone(@PathVariable("id") Long id) {
+        AnimalFuneralBlissStoneResDto result = animalFuneralService.getBlissStone(id);
+        return BaseResponse.onSuccess(SuccessStatus.FUNERAL_BLISS_STONE_GET_SUCCESS, result);
     }
 }

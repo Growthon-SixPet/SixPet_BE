@@ -9,7 +9,7 @@ import growthon.withtail_be.domain.animalhospital.dto.response.MedicalStaffResDt
 import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.animalhospital.entity.DayOfWeekType;
 import growthon.withtail_be.domain.animalhospital.entity.HospitalOperatingHours;
-import growthon.withtail_be.domain.animalhospital.entity.RegionType;
+import growthon.withtail_be.domain.model.RegionType;
 import growthon.withtail_be.domain.animalhospital.repository.AnimalHospitalRepository;
 import growthon.withtail_be.global.code.ErrorStatus;
 import growthon.withtail_be.global.exception.GeneralException;
