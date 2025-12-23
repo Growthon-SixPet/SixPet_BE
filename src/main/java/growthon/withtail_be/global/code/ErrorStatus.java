@@ -69,7 +69,10 @@ public enum ErrorStatus implements BaseCode {
     REVIEW_ACCESS_DENIED(HttpStatus.FORBIDDEN, "REVIEW_403_1", "해당 후기에 대한 권한이 없습니다."),
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW_404_2", "존재하지 않는 후기입니다."),
     REVIEW_IMAGE_REQUIRED(HttpStatus.BAD_REQUEST, "REVIEW_400_1", "후기 이미지 파일이 필요합니다."),
-    REVIEW_RATING_INVALID(HttpStatus.BAD_REQUEST, "REVIEW_400_2", "후기 평점은 1~5 사이여야 합니다.");
+    REVIEW_RATING_INVALID(HttpStatus.BAD_REQUEST, "REVIEW_400_2", "후기 평점은 1~5 사이여야 합니다."),
+
+    // animal hospital
+    ANIMAL_HOSPITAL_NOT_FOUND(HttpStatus.NOT_FOUND, "ANIMAL_HOSPITAL_404_1", "존재하지 않는 동물병원입니다.");
 
 
     private final HttpStatus httpStatus;

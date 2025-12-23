@@ -6,9 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "specialties")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Specialty {
 
     @Id
@@ -18,9 +24,8 @@ public class Specialty {
     @Column(unique = true, nullable = false)
     private String name;
 
-    protected Specialty() {
+    @Builder
+    public Specialty(String name) {
+        this.name = name;
     }
-
-    public Long getId() { return id; }
-    public String getName() { return name; }
 }

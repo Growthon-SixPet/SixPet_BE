@@ -1,6 +1,5 @@
 package growthon.withtail_be.domain.animalhospital.entity;
 
-import growthon.withtail_be.domain.model.Amenity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,27 +14,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "hospital_amenities")
+@Table(
+        name = "staff_specialties"
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HospitalAmenity {
+public class StaffSpecialty {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 의료진 (N:1)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hospital_id", nullable = false)
-    private AnimalHospital hospital;
+    @JoinColumn(name = "staff_id", nullable = false)
+    private MedicalStaff staff;
 
+    // 전문분야 (N:1)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "amenity_id", nullable = false)
-    private Amenity amenity;
+    @JoinColumn(name = "specialty_id", nullable = false)
+    private Specialty specialty;
 
     @Builder
-    public HospitalAmenity(AnimalHospital hospital, Amenity amenity) {
-        this.hospital = hospital;
-        this.amenity = amenity;
+    public StaffSpecialty(MedicalStaff staff, Specialty specialty) {
+        this.staff = staff;
+        this.specialty = specialty;
     }
-
 }

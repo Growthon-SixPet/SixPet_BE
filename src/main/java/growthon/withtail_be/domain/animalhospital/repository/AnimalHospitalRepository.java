@@ -1,81 +1,118 @@
 package growthon.withtail_be.domain.animalhospital.repository;
 
 import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
-import java.util.Optional;
+import growthon.withtail_be.domain.animalhospital.entity.RegionType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface AnimalHospitalRepository extends JpaRepository<AnimalHospital, Long>, JpaSpecificationExecutor<AnimalHospital> {
+import java.util.Optional;
 
-    // --- 기본(컬렉션 없이) ---
-    Optional<AnimalHospital> findById(Long id);
+public interface AnimalHospitalRepository extends JpaRepository<AnimalHospital, Long> {
 
-    // --- 상세(기본): 운영시간만 fetch ---
-    @Query("""
-        select distinct h
-        from AnimalHospital h
-        left join fetch h.operatingHours oh
-        where h.id = :id
-    """)
-    Optional<AnimalHospital> findWithOperatingHoursById(@Param("id") Long id);
+    // =========================
+    // 1) 검색 (필터 미포함)
+    // =========================
 
-    // --- 상세(기본): 제공서비스만 fetch (HospitalAmenity + Amenity) ---
-    @Query("""
-        select distinct h
-        from AnimalHospital h
-        left join fetch h.amenities ha
-        left join fetch ha.amenity a
-        where h.id = :id
-    """)
-    Optional<AnimalHospital> findWithAmenitiesById(@Param("id") Long id);
+    @EntityGraph(attributePaths = {"operatingHours"}) // List 1개 OK
+    Page<AnimalHospital> findByRegion(RegionType region, Pageable pageable);
 
-    // --- 상세(기본): 전문분야만 fetch (HospitalSpecialty + Specialty) ---
-    @Query("""
-        select distinct h
-        from AnimalHospital h
-        left join fetch h.specialties hs
-        left join fetch hs.specialty s
-        where h.id = :id
-    """)
-    Optional<AnimalHospital> findWithSpecialtiesById(@Param("id") Long id);
+    @EntityGraph(attributePaths = {"operatingHours"})
+    Page<AnimalHospital> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    // --- 상세(기본): 동물종만 fetch (HospitalAnimalType + AnimalType) ---
-    @Query("""
-        select distinct h
-        from AnimalHospital h
-        left join fetch h.animalTypes hat
-        left join fetch hat.animalType at
-        where h.id = :id
-    """)
-    Optional<AnimalHospital> findWithAnimalTypesById(@Param("id") Long id);
+    @EntityGraph(attributePaths = {"operatingHours"})
+    Page<AnimalHospital> findByRegionAndNameContainingIgnoreCase(RegionType region, String name, Pageable pageable);
 
-    // --- 상세(병원소개): 결제수단만 fetch (HospitalPaymentMethod + PaymentMethod) ---
-    @Query("""
-        select distinct h
-        from AnimalHospital h
-        left join fetch h.paymentMethods hpm
-        left join fetch hpm.paymentMethod pm
-        where h.id = :id
-    """)
-    Optional<AnimalHospital> findWithPaymentMethodsById(@Param("id") Long id);
+    @Override
+    @EntityGraph(attributePaths = {"operatingHours"})
+    Page<AnimalHospital> findAll(Pageable pageable);
 
-    // --- 상세(의료진): staff만 fetch ---
-    @Query("""
-        select distinct h
-        from AnimalHospital h
-        left join fetch h.staff st
-        where h.id = :id
-    """)
-    Optional<AnimalHospital> findWithStaffById(@Param("id") Long id);
+    // =========================
+    // 2) 검색 (필터 포함)
+    // =========================
 
-    // --- 상세(이미지): images만 fetch ---
-    @Query("""
-        select distinct h
-        from AnimalHospital h
-        left join fetch h.images img
-        where h.id = :id
-    """)
-    Optional<AnimalHospital> findWithImagesById(@Param("id") Long id);
+    @EntityGraph(attributePaths = {"operatingHours"}) // List 1개 OK
+    @Query(
+            value = """
+                select distinct h
+                from AnimalHospital h
+                left join h.specialties hs
+                left join hs.specialty s
+                left join h.animalTypes hat
+                left join hat.animalType at
+                where (:region is null or h.region = :region)
+                  and (:keyword is null or trim(:keyword) = ''
+                       or lower(h.name) like lower(concat('%', :keyword, '%')))
+                  and (:open24h is null or h.open24h = :open24h)
+                  and (:nightCare is null or h.nightCare = :nightCare)
+                  and (:specialtyName is null or s.name = :specialtyName)
+                  and (:animalTypeName is null or at.name = :animalTypeName)
+                """,
+            countQuery = """
+                select count(distinct h.id)
+                from AnimalHospital h
+                left join h.specialties hs
+                left join hs.specialty s
+                left join h.animalTypes hat
+                left join hat.animalType at
+                where (:region is null or h.region = :region)
+                  and (:keyword is null or trim(:keyword) = ''
+                       or lower(h.name) like lower(concat('%', :keyword, '%')))
+                  and (:open24h is null or h.open24h = :open24h)
+                  and (:nightCare is null or h.nightCare = :nightCare)
+                  and (:specialtyName is null or s.name = :specialtyName)
+                  and (:animalTypeName is null or at.name = :animalTypeName)
+                """
+    )
+    Page<AnimalHospital> searchWithFilters(
+            @Param("region") RegionType region,
+            @Param("keyword") String keyword,
+            @Param("open24h") Boolean open24h,
+            @Param("nightCare") Boolean nightCare,
+            @Param("specialtyName") String specialtyName,
+            @Param("animalTypeName") String animalTypeName,
+            Pageable pageable
+    );
+
+    // =========================
+    // 3) 상세 조회 (상단 공통)
+    // - List 컬렉션을 1개만 fetch: operatingHours만
+    // - specialties / animalTypes는 LAZY(배치로 최적화 권장)
+    // =========================
+
+    @EntityGraph(attributePaths = {
+            "operatingHours"
+            // "specialties", "specialties.specialty",
+            // "animalTypes", "animalTypes.animalType"
+            // -> 여기서 같이 fetch하면 MultipleBagFetchException 위험
+    })
+    @Query("select h from AnimalHospital h where h.id = :hospitalId")
+    Optional<AnimalHospital> findDetailById(@Param("hospitalId") Long hospitalId);
+
+    // =========================
+    // 4) 상세 조회 (의료진)
+    // - staffList(List) 하나만 fetch
+    // - staffSpecialties(List)는 LAZY(배치로 최적화 권장)
+    // =========================
+
+    @EntityGraph(attributePaths = {
+            "staffList"
+            // "staffList.staffSpecialties",
+            // "staffList.staffSpecialties.specialty"
+            // -> staffList(List) + staffSpecialties(List) 동시 fetch로 터질 수 있음
+    })
+    @Query("select h from AnimalHospital h where h.id = :hospitalId")
+    Optional<AnimalHospital> findStaffDetailById(@Param("hospitalId") Long hospitalId);
+
+    // =========================
+    // 5) 상세 조회 (병원 소식)
+    // - newsList(List) 하나만 fetch라 OK
+    // =========================
+
+    @EntityGraph(attributePaths = {"newsList"})
+    @Query("select h from AnimalHospital h where h.id = :hospitalId")
+    Optional<AnimalHospital> findNewsDetailById(@Param("hospitalId") Long hospitalId);
 }

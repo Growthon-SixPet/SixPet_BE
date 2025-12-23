@@ -3,17 +3,26 @@ package growthon.withtail_be.domain.animalhospital.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "animal_hospitals")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnimalHospital {
 
     @Id
@@ -24,93 +33,86 @@ public class AnimalHospital {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String sido;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private RegionType region;
 
-    @Column(nullable = false)
-    private String sigungu;
+    @Column(nullable = false, length = 255)
+    private String address;
 
-    private String roadAddress;
-    private String jibunAddress;
-    private String detailAddress;
-
-    @Column(nullable = false)
-    private String shortAddress;
-
+    @Column(length = 30)
     private String phone;
 
-    // 소개
     @Column(columnDefinition = "text")
     private String description;
 
-    // 운영
+    // 운영 필터
+
     @Column(nullable = false)
     private boolean open24h;
 
     @Column(nullable = false)
     private boolean nightCare;
 
-    @Column(nullable = false)
-    private boolean emergencyAvailable;
+    // 대표 이미지
+    private String mainImageUrl;
 
-    // 평점/후기수 (검색 정렬용)
+    // 정렬 필터
     @Column(nullable = false)
-    private double rating;
+    private double ratingAvg;
 
     @Column(nullable = false)
     private int reviewCount;
 
-    // 대표 이미지 (테스트 단계 null 허용)
-    private String mainImageUrl;
-
     // 연관관계
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HospitalImage> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    // 진료시간 (1:N)
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospitalOperatingHours> operatingHours = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MedicalStaff> staff = new ArrayList<>();
+    // 병원 소식 (1:N)
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HospitalNews> newsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    // 의료진 (1:N)
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicalStaff> staffList = new ArrayList<>();
+
+    // 병원-전문분야 (N:M 조인 엔티티)
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospitalSpecialty> specialties = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    // 병원-동물종 (N:M 조인 엔티티)
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospitalAnimalType> animalTypes = new ArrayList<>();
 
+    // 병원-편의시설 (N:M 조인 엔티티)
     @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospitalAmenity> amenities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HospitalPaymentMethod> paymentMethods = new ArrayList<>();
-
-    protected AnimalHospital() {
+    @Builder
+    public AnimalHospital(
+            String name,
+            RegionType region,
+            String address,
+            String phone,
+            String description,
+            boolean open24h,
+            boolean nightCare,
+            String mainImageUrl,
+            double ratingAvg,
+            int reviewCount
+    ) {
+        this.name = name;
+        this.region = region;
+        this.address = address;
+        this.phone = phone;
+        this.description = description;
+        this.open24h = open24h;
+        this.nightCare = nightCare;
+        this.mainImageUrl = mainImageUrl;
+        this.ratingAvg = ratingAvg;
+        this.reviewCount = reviewCount;
     }
 
-    // --- getter ---
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getSido() { return sido; }
-    public String getSigungu() { return sigungu; }
-    public String getRoadAddress() { return roadAddress; }
-    public String getJibunAddress() { return jibunAddress; }
-    public String getDetailAddress() { return detailAddress; }
-    public String getShortAddress() { return shortAddress; }
-    public String getPhone() { return phone; }
-    public String getDescription() { return description; }
-    public boolean isOpen24h() { return open24h; }
-    public boolean isNightCare() { return nightCare; }
-    public boolean isEmergencyAvailable() { return emergencyAvailable; }
-    public double getRating() { return rating; }
-    public int getReviewCount() { return reviewCount; }
-    public String getMainImageUrl() { return mainImageUrl; }
-
-    public List<HospitalImage> getImages() { return images; }
-    public List<HospitalOperatingHours> getOperatingHours() { return operatingHours; }
-    public List<MedicalStaff> getStaff() { return staff; }
-    public List<HospitalSpecialty> getSpecialties() { return specialties; }
-    public List<HospitalAnimalType> getAnimalTypes() { return animalTypes; }
-    public List<HospitalAmenity> getAmenities() { return amenities; }
-    public List<HospitalPaymentMethod> getPaymentMethods() { return paymentMethods; }
 }
