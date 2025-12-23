@@ -1,5 +1,6 @@
 package growthon.withtail_be.domain.animalhospital.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,44 +9,59 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "medical_staff")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MedicalStaff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 이름/직책/경력/학력/전문문구/이미지
     @Column(nullable = false)
     private String name;
 
+    // 직급
     private String role;
 
-    private Integer careerYears;
+    // 경력 내역
+    @Column(columnDefinition = "text", nullable = false)
+    private String careerDescription;
 
-    @Column(columnDefinition = "text")
-    private String education;
-
-    private String specialtyText;
-
-    private String profileImageUrl; // 테스트 단계: null 가능
+    private String profileImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id", nullable = false)
     private AnimalHospital hospital;
 
-    protected MedicalStaff() {
+    // 의료진-전문분야 매핑 (1:N)
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StaffSpecialty> staffSpecialties = new ArrayList<>();
+
+    @Builder
+    public MedicalStaff(
+            String name,
+            String role,
+            String careerDescription,
+            String profileImageUrl,
+            AnimalHospital hospital
+    ) {
+        this.name = name;
+        this.role = role;
+        this.careerDescription = careerDescription;
+        this.profileImageUrl = profileImageUrl;
+        this.hospital = hospital;
     }
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getRole() { return role; }
-    public Integer getCareerYears() { return careerYears; }
-    public String getEducation() { return education; }
-    public String getSpecialtyText() { return specialtyText; }
-    public String getProfileImageUrl() { return profileImageUrl; }
-    public AnimalHospital getHospital() { return hospital; }
 }

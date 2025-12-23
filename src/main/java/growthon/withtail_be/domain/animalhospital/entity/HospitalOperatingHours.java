@@ -11,9 +11,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "hospital_operating_hours")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalOperatingHours {
 
     @Id
@@ -28,6 +34,7 @@ public class HospitalOperatingHours {
     private String openTime;
     private String closeTime;
 
+    // 휴무 여부
     @Column(nullable = false)
     private boolean closed;
 
@@ -35,13 +42,19 @@ public class HospitalOperatingHours {
     @JoinColumn(name = "hospital_id", nullable = false)
     private AnimalHospital hospital;
 
-    protected HospitalOperatingHours() {
+    @Builder
+    public HospitalOperatingHours(
+            DayOfWeekType dayOfWeek,
+            String openTime,
+            String closeTime,
+            boolean closed,
+            AnimalHospital hospital
+    ) {
+        this.dayOfWeek = dayOfWeek;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.closed = closed;
+        this.hospital = hospital;
     }
 
-    public Long getId() { return id; }
-    public DayOfWeekType getDayOfWeek() { return dayOfWeek; }
-    public String getOpenTime() { return openTime; }
-    public String getCloseTime() { return closeTime; }
-    public boolean isClosed() { return closed; }
-    public AnimalHospital getHospital() { return hospital; }
 }
