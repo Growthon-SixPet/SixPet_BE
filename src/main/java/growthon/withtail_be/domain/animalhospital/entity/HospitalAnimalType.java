@@ -9,12 +9,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(
-        name = "hospital_animal_types",
-        uniqueConstraints = @UniqueConstraint(name = "uk_hospital_animal_type", columnNames = {"hospital_id", "animal_type_id"})
-)
+@Table(name = "hospital_animal_types")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalAnimalType {
 
     @Id
@@ -29,10 +32,9 @@ public class HospitalAnimalType {
     @JoinColumn(name = "animal_type_id", nullable = false)
     private AnimalType animalType;
 
-    protected HospitalAnimalType() {
+    @Builder
+    public HospitalAnimalType(AnimalHospital hospital, AnimalType animalType) {
+        this.hospital = hospital;
+        this.animalType = animalType;
     }
-
-    public Long getId() { return id; }
-    public AnimalHospital getHospital() { return hospital; }
-    public AnimalType getAnimalType() { return animalType; }
 }

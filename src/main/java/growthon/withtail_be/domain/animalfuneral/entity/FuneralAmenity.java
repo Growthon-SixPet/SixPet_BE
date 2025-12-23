@@ -1,5 +1,6 @@
 package growthon.withtail_be.domain.animalfuneral.entity;
 
+import growthon.withtail_be.domain.model.Amenity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
