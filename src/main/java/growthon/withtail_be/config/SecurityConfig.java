@@ -40,13 +40,16 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
-                                "/webjars/**"
+                                "/webjars/**",
+                                "/interest/**",
+                                "/reservation/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/test/**",
                                 "/auth/**",
                                 "/oauth/**",
-                                "/api/**"
+                                "/api/**",
+                                "/users/signup"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

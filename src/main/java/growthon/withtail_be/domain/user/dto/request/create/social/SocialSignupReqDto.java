@@ -1,4 +1,4 @@
-package growthon.withtail_be.domain.user.dto.request.social;
+package growthon.withtail_be.domain.user.dto.request.create.social;
 
 import growthon.withtail_be.domain.user.entity.Gender;
 import jakarta.validation.constraints.NotBlank;
