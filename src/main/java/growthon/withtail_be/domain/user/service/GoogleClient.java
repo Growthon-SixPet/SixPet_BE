@@ -6,6 +6,7 @@ import growthon.withtail_be.domain.user.dto.request.google.GoogleUserInfo;
 import growthon.withtail_be.global.code.ErrorStatus;
 import growthon.withtail_be.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GoogleClient {
 
     private final RestTemplate restTemplate;
@@ -38,6 +40,9 @@ public class GoogleClient {
     private static final String GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
 
     public String requestAccessToken(String code) {
+
+        log.info("GOOGLE REDIRECT URI (used in token request) = {}", googleRedirectUri);
+        log.info("AUTH CODE = {}", code);
 
         Map<String, String> params = Map.of(
                 "code", code,
