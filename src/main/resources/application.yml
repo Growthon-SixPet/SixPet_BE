@@ -56,3 +56,7 @@ coolsms:
     secret: ${COOLSMS_API_SECRET}
     domain: ${COOLSMS_DOMAIN}
     from: ${COOLSMS_FROM}
+
+swagger:
+  server-url: ${SWAGGER_SERVER_URL}
+
