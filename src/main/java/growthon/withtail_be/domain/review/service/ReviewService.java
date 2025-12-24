@@ -60,6 +60,8 @@ public class ReviewService {
                         .build()
         );
 
+        refreshTargetReviewStats(req.getTargetType(), req.getTargetId());
+
         String targetName = getTargetName(req.getTargetType(), req.getTargetId());
         return ReviewResDto.from(savedReview, userId, targetName);
     }
@@ -116,6 +118,8 @@ public class ReviewService {
 
         review.update(req.getRating(), req.getContent());
 
+        refreshTargetReviewStats(review.getTargetType(), review.getTargetId());
+
         String targetName = getTargetName(review.getTargetType(), review.getTargetId());
         return ReviewResDto.from(review, userId, targetName);
     }
@@ -135,7 +139,12 @@ public class ReviewService {
             }
         }
 
+        TargetType targetType = review.getTargetType();
+        Long targetId = review.getTargetId();
+
         reviewRepository.delete(review);
+
+        refreshTargetReviewStats(targetType, targetId);
     }
 
     // 평균 평점 계산
@@ -188,6 +197,25 @@ public class ReviewService {
                     .map(f -> f.getName())
                     .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_TARGET_NOT_FOUND));
         };
+    }
+
+    private void refreshTargetReviewStats(TargetType targetType, Long targetId) {
+        double avg = reviewRepository.findAverageRating(targetType, targetId); // coalesce로 0 보장
+        long cntLong = reviewRepository.countByTarget(targetType, targetId);
+        int cnt = Math.toIntExact(cntLong); // int 범위 넘어가면 예외(현실상 거의 없음)
+
+        switch (targetType) {
+            case HOSPITAL -> {
+                var hospital = hospitalRepository.findById(targetId)
+                        .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_TARGET_NOT_FOUND));
+                hospital.updateReviewStats(avg, cnt);
+            }
+            case FUNERAL -> {
+                var funeral = funeralRepository.findById(targetId)
+                        .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_TARGET_NOT_FOUND));
+                funeral.updateReviewStats(avg, cnt);
+            }
+        }
     }
 
 }
