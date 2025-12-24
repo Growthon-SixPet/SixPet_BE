@@ -1,5 +1,6 @@
 package growthon.withtail_be.domain.reservation.controller;
 
+import growthon.withtail_be.domain.reservation.domain.TargetType;
 import growthon.withtail_be.domain.reservation.dto.ReservationReqDto;
 import growthon.withtail_be.domain.reservation.dto.ReservationResDto;
 import growthon.withtail_be.domain.reservation.service.ReservationService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,16 +33,16 @@ public class ReservationController {
     @PostMapping
     @Operation(
             summary = "신규 예약 생성",
-            description = "병원/장례의 정보(예약을 생성하려는 타입과 해당 타입의 id)와" +
-                    "보호자 정보(이름과 전화번호), 반려동물 이름, 방문 정보(날짜, 시간, 사유)를 받아서" +
-                    "신규 예약을 생성합니다."
+            description = "query param으로 targetType/targetId(병원/장례 대상) + body로 보호자/반려동물/방문 정보를 받아 신규 예약을 생성합니다."
     )
     public BaseResponse<ReservationResDto> postReservation(
             Authentication authentication,
+            @RequestParam("targetType") TargetType targetType,
+            @RequestParam("targetId") Long targetId,
             @Valid @RequestBody ReservationReqDto dto
     ) {
         Long userId = Long.parseLong(authentication.getName());
-        ReservationResDto res = reservationService.postReservation(userId, dto);
+        ReservationResDto res = reservationService.postReservation(userId, targetType, targetId, dto);
         return BaseResponse.onSuccess(SuccessStatus.RESERVATION_CREATE_SUCCESS, res);
     }
 

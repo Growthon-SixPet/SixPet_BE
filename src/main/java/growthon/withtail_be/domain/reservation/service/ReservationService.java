@@ -37,17 +37,14 @@ public class ReservationService {
 
     // 예약 생성
     @Transactional
-    public ReservationResDto postReservation(Long userId, ReservationReqDto dto) {
+    public ReservationResDto postReservation(Long userId, TargetType targetType, Long targetId, ReservationReqDto dto) {
         User user = getUserOrThrow(userId);
-
-        // 2) targetType에 따라 대상 엔티티 조회 + 시간 중복 체크
-        TargetType targetType = dto.getTargetType();
 
         AnimalHospital hospital = null;
         AnimalFuneral funeral = null;
 
         if (targetType == TargetType.HOSPITAL) {
-            hospital = getHospitalOrThrow(dto.getTargetId());
+            hospital = getHospitalOrThrow(targetId);
 
             boolean conflict = reservationRepository
                     .existsByHospitalAndReservationDateAndReservationTimeAndStatusNot(
@@ -62,7 +59,7 @@ public class ReservationService {
             }
 
         } else if (targetType == TargetType.FUNERAL) {
-            funeral = getFuneralOrThrow(dto.getTargetId());
+            funeral = getFuneralOrThrow(targetId);
 
             boolean conflict = reservationRepository
                     .existsByFuneralAndReservationDateAndReservationTimeAndStatusNot(
@@ -141,12 +138,16 @@ public class ReservationService {
 
         validateReservationOwnerOrThrow(reservation, userId);
 
-        TargetType targetType = dto.getTargetType();
-        AnimalHospital hospital = null;
-        AnimalFuneral funeral = null;
+        if (reservation.getStatus() == ReservationStatus.CANCELED) {
+            throw new GeneralException(ErrorStatus.RESERVATION_ALREADY_CANCELED);
+        }
+
+        TargetType targetType = reservation.getTargetType();
+        AnimalHospital hospital = reservation.getHospital();
+        AnimalFuneral funeral = reservation.getFuneral();
 
         if (targetType == TargetType.HOSPITAL) {
-            hospital = getHospitalOrThrow(dto.getTargetId());
+            if (hospital == null) throw new GeneralException(ErrorStatus.INVALID_RESERVATION_TARGET);
 
             boolean conflict = reservationRepository
                     .existsByHospitalAndReservationDateAndReservationTimeAndStatusNotAndIdNot(
@@ -162,7 +163,7 @@ public class ReservationService {
             }
 
         } else if (targetType == TargetType.FUNERAL) {
-            funeral = getFuneralOrThrow(dto.getTargetId());
+            if (funeral == null) throw new GeneralException(ErrorStatus.INVALID_RESERVATION_TARGET);
 
             boolean conflict = reservationRepository
                     .existsByFuneralAndReservationDateAndReservationTimeAndStatusNotAndIdNot(
@@ -181,12 +182,7 @@ public class ReservationService {
             throw new GeneralException(ErrorStatus.INVALID_RESERVATION_TARGET);
         }
 
-        reservation.update(
-                targetType,
-                hospital,
-                funeral,
-                dto
-        );
+        reservation.update(dto);
 
         return ReservationResDto.from(reservation);
     }

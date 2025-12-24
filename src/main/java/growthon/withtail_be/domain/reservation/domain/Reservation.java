@@ -96,15 +96,7 @@ public class Reservation {
         this.status = ReservationStatus.COMPLETED;
     }
 
-    public void update(
-            TargetType targetType,
-            AnimalHospital hospital,
-            AnimalFuneral funeral,
-            ReservationReqDto dto
-    ) {
-        this.targetType = targetType;
-        this.hospital = hospital;
-        this.funeral = funeral;
+    public void update(ReservationReqDto dto) {
         this.ownerName = dto.getOwnerName();
         this.phoneNumber = dto.getPhoneNumber();
         this.petName = dto.getPetName();
