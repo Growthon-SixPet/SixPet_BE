@@ -109,4 +109,9 @@ public class AnimalFuneral {
         this.ratingAvg = ratingAvg;
     }
 
+    public void updateReviewStats(double ratingAvg, int reviewCount) {
+        this.ratingAvg = ratingAvg;
+        this.reviewCount = reviewCount;
+    }
+
 }

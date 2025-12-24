@@ -116,4 +116,9 @@ public class AnimalHospital {
         this.reviewCount = reviewCount;
     }
 
+    public void updateReviewStats(double ratingAvg, int reviewCount) {
+        this.ratingAvg = ratingAvg;
+        this.reviewCount = reviewCount;
+    }
+
 }
