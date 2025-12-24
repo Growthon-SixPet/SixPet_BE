@@ -44,7 +44,14 @@ public enum SuccessStatus implements BaseCode {
     REVIEW_MY_LIST_GET_SUCCESS(HttpStatus.OK, "REVIEW_200_2", "내 후기 목록 조회 성공"),
     REVIEW_UPDATE_SUCCESS(HttpStatus.OK, "REVIEW_200_3", "후기 수정 성공"),
     REVIEW_DELETE_SUCCESS(HttpStatus.OK, "REVIEW_200_4", "후기 삭제 성공"),
-    REVIEW_AVG_GET_SUCCESS(HttpStatus.OK, "REVIEW_200_5", "평균 평점 조회 성공");
+    REVIEW_AVG_GET_SUCCESS(HttpStatus.OK, "REVIEW_200_5", "평균 평점 조회 성공"),
+
+    // funeral
+    FUNERAL_LIST_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_1", "장례식장 목록 조회 성공"),
+    FUNERAL_DETAIL_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_2", "장례식장 상세(공통) 조회 성공"),
+    FUNERAL_PROCEDURE_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_3", "장례 절차 조회 성공"),
+    FUNERAL_BLISS_STONE_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_4", "메모리얼 스톤 조회 성공");
+
 
 
     private final HttpStatus httpStatus;

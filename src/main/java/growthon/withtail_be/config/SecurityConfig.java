@@ -48,8 +48,9 @@ public class SecurityConfig {
                                 "/test/**",
                                 "/auth/**",
                                 "/oauth/**",
-                                "/users/signup",
-                                "/api/**"
+                                "/hospitals/**",
+                                "/funerals/**",
+                                "/users/signup"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
