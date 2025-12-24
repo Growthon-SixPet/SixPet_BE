@@ -30,6 +30,8 @@ public class ReservationResDto {
     private Boolean nightCare;
     private Boolean openNow;
 
+    private String mainImageUrl;
+
     private String petName;
 
     private LocalDate reservationDate;
@@ -48,6 +50,8 @@ public class ReservationResDto {
         Boolean open24h = null;
         Boolean nightCare = null;
 
+        String mainImageUrl = null;
+
         if (reservation.getTargetType() == TargetType.HOSPITAL) {
             AnimalHospital hospital = reservation.getHospital();
             if (hospital != null) {
@@ -57,6 +61,7 @@ public class ReservationResDto {
                 reviewCount = hospital.getReviewCount();
                 open24h = hospital.isOpen24h();
                 nightCare = hospital.isNightCare();
+                mainImageUrl = hospital.getMainImageUrl();
             }
         } else if (reservation.getTargetType() == TargetType.FUNERAL) {
             AnimalFuneral funeral = reservation.getFuneral();
@@ -65,6 +70,7 @@ public class ReservationResDto {
                 targetName = funeral.getName();
                 ratingAvg = funeral.getRatingAvg();
                 reviewCount = funeral.getReviewCount();
+                mainImageUrl = funeral.getMainImageUrl();
             }
         }
 
@@ -81,6 +87,7 @@ public class ReservationResDto {
                 .open24h(open24h)
                 .nightCare(nightCare)
                 .openNow(openNow)
+                .mainImageUrl(mainImageUrl)
                 .petName(reservation.getPetName())
                 .reservationDate(reservation.getReservationDate())
                 .reservationTime(reservation.getReservationTime())
