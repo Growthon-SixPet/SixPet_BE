@@ -93,7 +93,7 @@ public class Reservation {
         this.reservationDate = reservationDate;
         this.reservationTime = reservationTime;
         this.visitReason = visitReason;
-        this.status = ReservationStatus.BEFORE_VISIT;
+        this.status = ReservationStatus.COMPLETED;
     }
 
     public void update(
