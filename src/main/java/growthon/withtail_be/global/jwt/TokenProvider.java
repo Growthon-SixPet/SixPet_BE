@@ -87,10 +87,16 @@ public class TokenProvider {
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION);
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)) {
-            return bearerToken.substring(BEARER.length());
+        if (!StringUtils.hasText(bearerToken)) {
+            return null;
         }
-        return null;
+
+        if (!bearerToken.startsWith(BEARER)) {
+            return null;
+        }
+
+        String token = bearerToken.substring(BEARER.length()).trim();
+        return StringUtils.hasText(token) ? token : null;
     }
 
     // 토큰 검증
