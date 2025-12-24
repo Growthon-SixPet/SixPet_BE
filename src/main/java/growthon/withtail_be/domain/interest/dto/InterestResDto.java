@@ -27,6 +27,8 @@ public class InterestResDto {
     private Boolean open24h;
     private Boolean nightCare;
 
+    private String mainImageUrl;
+
     public static InterestResDto fromHospital(Interest interest, AnimalHospital h, boolean openNow) {
         return InterestResDto.builder()
                 .interestId(interest.getInterestId())
@@ -39,6 +41,7 @@ public class InterestResDto {
                 .openNow(openNow)
                 .open24h(h.isOpen24h())
                 .nightCare(h.isNightCare())
+                .mainImageUrl(h.getMainImageUrl())
                 .build();
     }
 
@@ -54,6 +57,7 @@ public class InterestResDto {
                 .openNow(openNow)
                 .open24h(null)
                 .nightCare(null)
+                .mainImageUrl(f.getMainImageUrl())
                 .build();
     }
 
