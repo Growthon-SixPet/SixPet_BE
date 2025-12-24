@@ -1,42 +1,60 @@
 package growthon.withtail_be.domain.interest.dto;
 
-import growthon.withtail_be.domain.interest.domain.Funeral;
-import growthon.withtail_be.domain.interest.domain.Hospital;
+import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
+import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.interest.domain.Interest;
 import growthon.withtail_be.domain.interest.domain.TargetType;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Builder
 @Getter
 public class InterestResDto {
 
-private Long interestId;
+    private Long interestId;
+
     private TargetType targetType;
     private Long targetId;
     private String targetName;
 
-    public static InterestResDto from (Interest interest) {
-        Long targetId = null;
-        String targetName = null;
+    private String address;
 
-        if (interest.getTargetType() == TargetType.HOSPITAL) {
-            Hospital hospital = interest.getHospital();
-            targetId = hospital.getId();
-            targetName = hospital.getName();
-        } else if (interest.getTargetType() == TargetType.FUNERAL) {
-            Funeral funeral = interest.getFuneral();
-            targetId = funeral.getId();
-            targetName = funeral.getName();
-        }
+    private Double ratingAvg;
+    private Integer reviewCount;
 
+    private Boolean openNow;
+
+    private Boolean open24h;
+    private Boolean nightCare;
+
+    public static InterestResDto fromHospital(Interest interest, AnimalHospital h, boolean openNow) {
         return InterestResDto.builder()
-                    .interestId(interest.getInterestId())
-                    .targetType(interest.getTargetType())
-                    .targetId(targetId)
-                    .targetName(targetName)
-                    .build();
+                .interestId(interest.getInterestId())
+                .targetType(TargetType.HOSPITAL)
+                .targetId(h.getId())
+                .targetName(h.getName())
+                .address(h.getAddress())
+                .ratingAvg(h.getRatingAvg())
+                .reviewCount(h.getReviewCount())
+                .openNow(openNow)
+                .open24h(h.isOpen24h())
+                .nightCare(h.isNightCare())
+                .build();
     }
+
+    public static InterestResDto fromFuneral(Interest interest, AnimalFuneral f, boolean openNow) {
+        return InterestResDto.builder()
+                .interestId(interest.getInterestId())
+                .targetType(TargetType.FUNERAL)
+                .targetId(f.getId())
+                .targetName(f.getName())
+                .address(f.getAddress())
+                .ratingAvg(f.getRatingAvg())
+                .reviewCount(f.getReviewCount())
+                .openNow(openNow)
+                .open24h(null)
+                .nightCare(null)
+                .build();
+    }
+
 }

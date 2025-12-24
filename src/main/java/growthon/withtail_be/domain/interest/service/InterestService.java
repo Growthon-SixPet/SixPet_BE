@@ -1,13 +1,15 @@
 package growthon.withtail_be.domain.interest.service;
 
-import growthon.withtail_be.domain.interest.domain.Funeral;
-import growthon.withtail_be.domain.interest.domain.Hospital;
+import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
+import growthon.withtail_be.domain.animalfuneral.repository.AnimalFuneralRepository;
+import growthon.withtail_be.domain.animalfuneral.service.AnimalFuneralService;
+import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
+import growthon.withtail_be.domain.animalhospital.repository.AnimalHospitalRepository;
+import growthon.withtail_be.domain.animalhospital.service.AnimalHospitalService;
 import growthon.withtail_be.domain.interest.domain.Interest;
 import growthon.withtail_be.domain.interest.domain.TargetType;
 import growthon.withtail_be.domain.interest.dto.InterestReqDto;
 import growthon.withtail_be.domain.interest.dto.InterestResDto;
-import growthon.withtail_be.domain.interest.repository.FuneralRepository;
-import growthon.withtail_be.domain.interest.repository.HospitalRepository;
 import growthon.withtail_be.domain.interest.repository.InterestRepository;
 import growthon.withtail_be.domain.user.entity.User;
 import growthon.withtail_be.domain.user.repository.UserRepository;
@@ -22,10 +24,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class InterestService {
-    private final HospitalRepository hospitalRepository;
-    private final FuneralRepository funeralRepository;
+    private final AnimalHospitalRepository hospitalRepository;
+    private final AnimalFuneralRepository funeralRepository;
     private final UserRepository userRepository;
     private final InterestRepository interestRepository;
+
+    private final AnimalHospitalService animalHospitalService;
+    private final AnimalFuneralService animalFuneralService;
+
 
     // 즐겨찾기 생성
     @Transactional
@@ -37,8 +43,8 @@ public class InterestService {
 
         User user = getUserOrThrow(userId);
 
-        Hospital hospital = null;
-        Funeral funeral = null;
+        AnimalHospital hospital = null;
+        AnimalFuneral funeral = null;
 
         // 병원일 경우
         if (dto.getTargetType() == TargetType.HOSPITAL) {
@@ -66,7 +72,7 @@ public class InterestService {
         Interest interest = new Interest(user, dto.getTargetType(), hospital, funeral);
         interestRepository.save(interest);
 
-        return InterestResDto.from(interest);
+        return toResDto(interest);
     }
 
     // 유저별 즐겨찾기 조회
@@ -76,7 +82,7 @@ public class InterestService {
 
         return interestRepository.findByUserId(userId)
                 .stream()
-                .map(InterestResDto::from)
+                .map(this::toResDto)
                 .toList();
     }
 
@@ -87,7 +93,7 @@ public class InterestService {
         Interest interest = getInterestOrThrow(interestId);
         validateOwnerOrThrow(interest, userId);
 
-        return InterestResDto.from(interest);
+        return toResDto(interest);
     }
 
     // 즐겨찾기 삭제
@@ -115,6 +121,37 @@ public class InterestService {
         if (!interest.getUser().getId().equals(userId)) {
             throw new GeneralException(ErrorStatus.INTEREST_ACCESS_DENIED);
         }
+    }
+
+    private InterestResDto toResDto(Interest interest) {
+
+        TargetType type = interest.getTargetType();
+        if (type == null) {
+            throw new GeneralException(ErrorStatus.INVALID_INTEREST_TARGET);
+        }
+
+        if (type == TargetType.HOSPITAL) {
+            AnimalHospital h = interest.getHospital();
+            if (h == null) {
+                throw new GeneralException(ErrorStatus.INVALID_INTEREST_TARGET);
+            }
+
+            boolean openNow = animalHospitalService.calculateOpenNow(h);
+            return InterestResDto.fromHospital(interest, h, openNow);
+        }
+
+        if (type == TargetType.FUNERAL) {
+            AnimalFuneral f = interest.getFuneral();
+            if (f == null) {
+                throw new GeneralException(ErrorStatus.INVALID_INTEREST_TARGET);
+            }
+
+            boolean openNow = animalFuneralService.calculateOpenNow(f);
+            return InterestResDto.fromFuneral(interest, f, openNow);
+        }
+
+        // TargetType에 값이 추가되거나 예상 못한 값이 들어온 경우
+        throw new GeneralException(ErrorStatus.INVALID_INTEREST_TARGET);
     }
 
 }

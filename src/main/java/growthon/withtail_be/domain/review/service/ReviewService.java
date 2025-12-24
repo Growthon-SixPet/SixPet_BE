@@ -1,7 +1,7 @@
 package growthon.withtail_be.domain.review.service;
 
-import growthon.withtail_be.domain.interest.repository.FuneralRepository;
-import growthon.withtail_be.domain.interest.repository.HospitalRepository;
+import growthon.withtail_be.domain.animalfuneral.repository.AnimalFuneralRepository;
+import growthon.withtail_be.domain.animalhospital.repository.AnimalHospitalRepository;
 import growthon.withtail_be.domain.review.dto.ReviewCreateReqDto;
 import growthon.withtail_be.domain.review.dto.ReviewResDto;
 import growthon.withtail_be.domain.review.dto.ReviewUpdateReqDto;
@@ -30,8 +30,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
-    private final HospitalRepository hospitalRepository;
-    private final FuneralRepository funeralRepository;
+    private final AnimalHospitalRepository hospitalRepository;
+    private final AnimalFuneralRepository funeralRepository;
 
     // 후기 생성
     public ReviewResDto createReview(

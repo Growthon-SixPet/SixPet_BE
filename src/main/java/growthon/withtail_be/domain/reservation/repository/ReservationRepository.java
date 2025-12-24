@@ -1,7 +1,7 @@
 package growthon.withtail_be.domain.reservation.repository;
 
-import growthon.withtail_be.domain.interest.domain.Funeral;
-import growthon.withtail_be.domain.interest.domain.Hospital;
+import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
+import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.reservation.domain.Reservation;
 import growthon.withtail_be.domain.reservation.domain.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,14 +18,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     boolean existsByReservationNumber(String reservationNumber);
 
     boolean existsByHospitalAndReservationDateAndReservationTimeAndStatusNot(
-            Hospital hospital,
+            AnimalHospital hospital,
             LocalDate reservationDate,
             LocalTime reservationTime,
             ReservationStatus status
     );
 
     boolean existsByFuneralAndReservationDateAndReservationTimeAndStatusNot(
-            Funeral funeral,
+            AnimalFuneral funeral,
             LocalDate reservationDate,
             LocalTime reservationTime,
             ReservationStatus status
@@ -34,7 +34,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByUser_Id(Long userId);
 
     boolean existsByHospitalAndReservationDateAndReservationTimeAndStatusNotAndIdNot(
-            Hospital hospital,
+            AnimalHospital hospital,
             LocalDate reservationDate,
             LocalTime reservationTime,
             ReservationStatus status,
@@ -42,7 +42,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     );
 
     boolean existsByFuneralAndReservationDateAndReservationTimeAndStatusNotAndIdNot(
-            Funeral funeral,
+            AnimalFuneral funeral,
             LocalDate reservationDate,
             LocalTime reservationTime,
             ReservationStatus status,
