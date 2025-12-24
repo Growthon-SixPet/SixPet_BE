@@ -36,7 +36,22 @@ public enum SuccessStatus implements BaseCode {
     RESERVATION_LIST_GET_SUCCESS(HttpStatus.OK, "RESERVATION_200_1", "예약 목록 조회 성공"),
     RESERVATION_GET_SUCCESS(HttpStatus.OK, "RESERVATION_200_2", "예약 단건 조회 성공"),
     RESERVATION_UPDATE_SUCCESS(HttpStatus.OK, "RESERVATION_200_3", "예약 수정 성공"),
-    RESERVATION_CANCEL_SUCCESS(HttpStatus.OK, "RESERVATION_200_4", "예약 취소 성공");
+    RESERVATION_CANCEL_SUCCESS(HttpStatus.OK, "RESERVATION_200_4", "예약 취소 성공"),
+
+    // review
+    REVIEW_CREATE_SUCCESS(HttpStatus.CREATED, "REVIEW_201_1", "후기 생성 성공"),
+    REVIEW_LIST_GET_SUCCESS(HttpStatus.OK, "REVIEW_200_1", "후기 목록 조회 성공"),
+    REVIEW_MY_LIST_GET_SUCCESS(HttpStatus.OK, "REVIEW_200_2", "내 후기 목록 조회 성공"),
+    REVIEW_UPDATE_SUCCESS(HttpStatus.OK, "REVIEW_200_3", "후기 수정 성공"),
+    REVIEW_DELETE_SUCCESS(HttpStatus.OK, "REVIEW_200_4", "후기 삭제 성공"),
+    REVIEW_AVG_GET_SUCCESS(HttpStatus.OK, "REVIEW_200_5", "평균 평점 조회 성공"),
+
+    // funeral
+    FUNERAL_LIST_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_1", "장례식장 목록 조회 성공"),
+    FUNERAL_DETAIL_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_2", "장례식장 상세(공통) 조회 성공"),
+    FUNERAL_PROCEDURE_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_3", "장례 절차 조회 성공"),
+    FUNERAL_BLISS_STONE_GET_SUCCESS(HttpStatus.OK, "FUNERAL_200_4", "메모리얼 스톤 조회 성공");
+
 
 
     private final HttpStatus httpStatus;
