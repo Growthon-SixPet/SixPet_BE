@@ -1,7 +1,7 @@
 package growthon.withtail_be.domain.reservation.dto;
 
-import growthon.withtail_be.domain.interest.domain.Funeral;
-import growthon.withtail_be.domain.interest.domain.Hospital;
+import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
+import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.reservation.domain.Reservation;
 import growthon.withtail_be.domain.reservation.domain.TargetType;
 import lombok.Builder;
@@ -38,13 +38,13 @@ public class ReservationResDto {
         String targetName = null;
 
         if (reservation.getTargetType() == TargetType.HOSPITAL) {
-            Hospital hospital = reservation.getHospital();
+            AnimalHospital hospital = reservation.getHospital();
             if (hospital != null) {
                 targetId = hospital.getId();
                 targetName = hospital.getName();
             }
         } else if (reservation.getTargetType() == TargetType.FUNERAL) {
-            Funeral funeral = reservation.getFuneral();
+            AnimalFuneral funeral = reservation.getFuneral();
             if (funeral != null) {
                 targetId = funeral.getId();
                 targetName = funeral.getName();

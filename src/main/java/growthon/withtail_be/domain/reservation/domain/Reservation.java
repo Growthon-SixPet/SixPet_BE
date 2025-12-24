@@ -1,7 +1,7 @@
 package growthon.withtail_be.domain.reservation.domain;
 
-import growthon.withtail_be.domain.interest.domain.Funeral;
-import growthon.withtail_be.domain.interest.domain.Hospital;
+import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
+import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.reservation.dto.ReservationReqDto;
 import growthon.withtail_be.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -42,11 +42,11 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id")
-    private Hospital hospital;
+    private AnimalHospital hospital;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funeral_id")
-    private Funeral funeral;
+    private AnimalFuneral funeral;
 
     @Column(nullable = false)
     private String ownerName;
@@ -73,8 +73,8 @@ public class Reservation {
             String reservationNumber,
             User user,
             TargetType targetType,
-            Hospital hospital,
-            Funeral funeral,
+            AnimalHospital hospital,
+            AnimalFuneral funeral,
             String ownerName,
             String phoneNumber,
             String petName,
@@ -98,8 +98,8 @@ public class Reservation {
 
     public void update(
             TargetType targetType,
-            Hospital hospital,
-            Funeral funeral,
+            AnimalHospital hospital,
+            AnimalFuneral funeral,
             ReservationReqDto dto
     ) {
         this.targetType = targetType;

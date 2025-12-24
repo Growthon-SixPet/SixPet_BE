@@ -1,9 +1,9 @@
 package growthon.withtail_be.domain.reservation.service;
 
-import growthon.withtail_be.domain.interest.domain.Funeral;
-import growthon.withtail_be.domain.interest.domain.Hospital;
-import growthon.withtail_be.domain.interest.repository.FuneralRepository;
-import growthon.withtail_be.domain.interest.repository.HospitalRepository;
+import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
+import growthon.withtail_be.domain.animalfuneral.repository.AnimalFuneralRepository;
+import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
+import growthon.withtail_be.domain.animalhospital.repository.AnimalHospitalRepository;
 import growthon.withtail_be.domain.reservation.domain.Reservation;
 import growthon.withtail_be.domain.reservation.domain.ReservationStatus;
 import growthon.withtail_be.domain.reservation.domain.TargetType;
@@ -29,8 +29,8 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
-    private final HospitalRepository hospitalRepository;
-    private final FuneralRepository funeralRepository;
+    private final AnimalHospitalRepository hospitalRepository;
+    private final AnimalFuneralRepository funeralRepository;
 
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final DateTimeFormatter RES_NO_FMT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -43,8 +43,8 @@ public class ReservationService {
         // 2) targetType에 따라 대상 엔티티 조회 + 시간 중복 체크
         TargetType targetType = dto.getTargetType();
 
-        Hospital hospital = null;
-        Funeral funeral = null;
+        AnimalHospital hospital = null;
+        AnimalFuneral funeral = null;
 
         if (targetType == TargetType.HOSPITAL) {
             hospital = getHospitalOrThrow(dto.getTargetId());
@@ -142,8 +142,8 @@ public class ReservationService {
         validateReservationOwnerOrThrow(reservation, userId);
 
         TargetType targetType = dto.getTargetType();
-        Hospital hospital = null;
-        Funeral funeral = null;
+        AnimalHospital hospital = null;
+        AnimalFuneral funeral = null;
 
         if (targetType == TargetType.HOSPITAL) {
             hospital = getHospitalOrThrow(dto.getTargetId());
@@ -234,12 +234,12 @@ public class ReservationService {
         }
     }
 
-    private Hospital getHospitalOrThrow(Long hospitalId) {
+    private AnimalHospital getHospitalOrThrow(Long hospitalId) {
         return hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.HOSPITAL_NOT_FOUND));
     }
 
-    private Funeral getFuneralOrThrow(Long funeralId) {
+    private AnimalFuneral getFuneralOrThrow(Long funeralId) {
         return funeralRepository.findById(funeralId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.FUNERAL_NOT_FOUND));
     }

@@ -1,8 +1,9 @@
 package growthon.withtail_be.domain.interest.domain;
 
+import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
+import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.model.BaseEntity;
 import growthon.withtail_be.domain.user.entity.User;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,8 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,14 +34,14 @@ public class Interest extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id")
-    private Hospital hospital;
+    private AnimalHospital hospital;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funeral_id")
-    private Funeral funeral;
+    private AnimalFuneral funeral;
 
     public Interest(User user, TargetType targetType,
-                    Hospital hospital, Funeral funeral) {
+                    AnimalHospital hospital, AnimalFuneral funeral) {
         this.user = user;
         this.targetType = targetType;
         this.hospital = hospital;

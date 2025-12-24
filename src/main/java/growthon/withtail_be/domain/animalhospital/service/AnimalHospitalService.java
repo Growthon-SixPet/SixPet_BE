@@ -156,7 +156,7 @@ public class AnimalHospitalService {
     }
 
     // 지금 영업중인지 계산
-    private boolean isOpenNow(AnimalHospital hospital) {
+    public boolean isOpenNow(AnimalHospital hospital) {
         if (hospital.isOpen24h()) return true;
 
         DayOfWeekType today = convertToDayOfWeekType(LocalDate.now().getDayOfWeek().name());
@@ -218,5 +218,8 @@ public class AnimalHospitalService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ANIMAL_HOSPITAL_NOT_FOUND));
     }
 
+    public boolean calculateOpenNow(AnimalHospital hospital) {
+        return isOpenNow(hospital);
+    }
 
 }

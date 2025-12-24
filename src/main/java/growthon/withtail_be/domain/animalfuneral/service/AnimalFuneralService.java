@@ -126,7 +126,7 @@ public class AnimalFuneralService {
     // helpers
 
     // 현재 운영 중인지
-    private boolean calculateIsOpenNow(List<FuneralOperatingHours> operatingHours) {
+    public boolean calculateIsOpenNow(List<FuneralOperatingHours> operatingHours) {
         if (operatingHours == null || operatingHours.isEmpty()) {
             return false;
         }
@@ -170,6 +170,10 @@ public class AnimalFuneralService {
             case SATURDAY -> DayOfWeekType.SAT;
             case SUNDAY -> DayOfWeekType.SUN;
         };
+    }
+
+    public boolean calculateOpenNow(AnimalFuneral funeral) {
+        return calculateIsOpenNow(funeral.getOperatingHours());
     }
 
 }
