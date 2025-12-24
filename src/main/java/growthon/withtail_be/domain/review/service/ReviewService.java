@@ -49,18 +49,19 @@ public class ReviewService {
             imageUrl = s3Service.upload(image, "reviews");
         }
 
-        Review review = Review.builder()
-                .user(user)
-                .targetType(req.getTargetType())
-                .targetId(req.getTargetId())
-                .rating(req.getRating())
-                .content(req.getContent())
-                .imageUrl(imageUrl)
-                .build();
+        Review savedReview = reviewRepository.save(
+                Review.builder()
+                        .user(user)
+                        .targetType(req.getTargetType())
+                        .targetId(req.getTargetId())
+                        .rating(req.getRating())
+                        .content(req.getContent())
+                        .imageUrl(imageUrl)
+                        .build()
+        );
 
-        Review savedReview = reviewRepository.save(review);
-
-        return ReviewResDto.from(savedReview, user.getId());
+        String targetName = getTargetName(req.getTargetType(), req.getTargetId());
+        return ReviewResDto.from(savedReview, userId, targetName);
     }
 
     // 병원/장례별 후기 목록 조회
@@ -75,8 +76,10 @@ public class ReviewService {
                         targetType, targetId
                 );
 
+        String targetName = getTargetName(targetType, targetId);
+
         return reviews.stream()
-                .map(review -> ReviewResDto.from(review, userId))
+                .map(r -> ReviewResDto.from(r, userId, targetName))
                 .toList();
     }
 
@@ -89,7 +92,7 @@ public class ReviewService {
                 reviewRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
         return reviews.stream()
-                .map(review -> ReviewResDto.from(review, userId))
+                .map(r -> ReviewResDto.from(r, userId, getTargetName(r.getTargetType(), r.getTargetId())))
                 .toList();
     }
 
@@ -113,7 +116,8 @@ public class ReviewService {
 
         review.update(req.getRating(), req.getContent());
 
-        return ReviewResDto.from(review, userId);
+        String targetName = getTargetName(review.getTargetType(), review.getTargetId());
+        return ReviewResDto.from(review, userId, targetName);
     }
 
     // 후기 삭제
@@ -173,6 +177,17 @@ public class ReviewService {
         if (!review.getUser().getId().equals(userId)) {
             throw new GeneralException(ErrorStatus.REVIEW_ACCESS_DENIED);
         }
+    }
+
+    private String getTargetName(TargetType targetType, Long targetId) {
+        return switch (targetType) {
+            case HOSPITAL -> hospitalRepository.findById(targetId)
+                    .map(h -> h.getName())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_TARGET_NOT_FOUND));
+            case FUNERAL -> funeralRepository.findById(targetId)
+                    .map(f -> f.getName())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_TARGET_NOT_FOUND));
+        };
     }
 
 }

@@ -9,6 +9,7 @@ public record ReviewResDto(
         Long reviewId,
         TargetType targetType,
         Long targetId,
+        String targetName,
 
         Integer rating,
         String content,
@@ -20,11 +21,12 @@ public record ReviewResDto(
         LocalDateTime updatedAt,
         boolean isMine
 ) {
-    public static ReviewResDto from(Review review, Long userId) {
+    public static ReviewResDto from(Review review, Long userId, String targetName) {
         return new ReviewResDto(
                 review.getId(),
                 review.getTargetType(),
                 review.getTargetId(),
+                targetName,
 
                 review.getRating(),
                 review.getContent(),
