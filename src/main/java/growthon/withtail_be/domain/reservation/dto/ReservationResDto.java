@@ -24,6 +24,12 @@ public class ReservationResDto {
     private Long targetId;
     private String targetName;
 
+    private Double ratingAvg;
+    private Integer reviewCount;
+    private Boolean open24h;
+    private Boolean nightCare;
+    private Boolean openNow;
+
     private String petName;
 
     private LocalDate reservationDate;
@@ -31,23 +37,34 @@ public class ReservationResDto {
 
     private String visitReason;
 
-    private String status; // 필요하면 ReservationStatus로 바꿔도 됨
+    private String status;
 
-    public static ReservationResDto from(Reservation reservation) {
+    public static ReservationResDto from(Reservation reservation, boolean openNow) {
         Long targetId = null;
         String targetName = null;
+
+        Double ratingAvg = null;
+        Integer reviewCount = null;
+        Boolean open24h = null;
+        Boolean nightCare = null;
 
         if (reservation.getTargetType() == TargetType.HOSPITAL) {
             AnimalHospital hospital = reservation.getHospital();
             if (hospital != null) {
                 targetId = hospital.getId();
                 targetName = hospital.getName();
+                ratingAvg = hospital.getRatingAvg();
+                reviewCount = hospital.getReviewCount();
+                open24h = hospital.isOpen24h();
+                nightCare = hospital.isNightCare();
             }
         } else if (reservation.getTargetType() == TargetType.FUNERAL) {
             AnimalFuneral funeral = reservation.getFuneral();
             if (funeral != null) {
                 targetId = funeral.getId();
                 targetName = funeral.getName();
+                ratingAvg = funeral.getRatingAvg();
+                reviewCount = funeral.getReviewCount();
             }
         }
 
@@ -59,6 +76,11 @@ public class ReservationResDto {
                 .targetType(reservation.getTargetType())
                 .targetId(targetId)
                 .targetName(targetName)
+                .ratingAvg(ratingAvg)
+                .reviewCount(reviewCount)
+                .open24h(open24h)
+                .nightCare(nightCare)
+                .openNow(openNow)
                 .petName(reservation.getPetName())
                 .reservationDate(reservation.getReservationDate())
                 .reservationTime(reservation.getReservationTime())

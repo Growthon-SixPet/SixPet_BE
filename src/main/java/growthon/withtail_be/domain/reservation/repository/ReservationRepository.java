@@ -4,16 +4,17 @@ import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
 import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.reservation.domain.Reservation;
 import growthon.withtail_be.domain.reservation.domain.ReservationStatus;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-    List<Reservation> findAllByUserId(Long userId);
 
     boolean existsByReservationNumber(String reservationNumber);
 
@@ -31,6 +32,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             ReservationStatus status
     );
 
+    @EntityGraph(attributePaths = {
+            "hospital",
+            "funeral"
+    })
     List<Reservation> findAllByUser_Id(Long userId);
 
     boolean existsByHospitalAndReservationDateAndReservationTimeAndStatusNotAndIdNot(
@@ -48,4 +53,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             ReservationStatus status,
             Long id
     );
+
+    @EntityGraph(attributePaths = {
+            "hospital",
+            "funeral"
+    })
+    Optional<Reservation> findWithTargetsById(Long id);
+
 }

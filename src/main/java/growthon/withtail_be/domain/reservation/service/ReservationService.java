@@ -2,8 +2,10 @@ package growthon.withtail_be.domain.reservation.service;
 
 import growthon.withtail_be.domain.animalfuneral.entity.AnimalFuneral;
 import growthon.withtail_be.domain.animalfuneral.repository.AnimalFuneralRepository;
+import growthon.withtail_be.domain.animalfuneral.service.AnimalFuneralService;
 import growthon.withtail_be.domain.animalhospital.entity.AnimalHospital;
 import growthon.withtail_be.domain.animalhospital.repository.AnimalHospitalRepository;
+import growthon.withtail_be.domain.animalhospital.service.AnimalHospitalService;
 import growthon.withtail_be.domain.reservation.domain.Reservation;
 import growthon.withtail_be.domain.reservation.domain.ReservationStatus;
 import growthon.withtail_be.domain.reservation.domain.TargetType;
@@ -31,6 +33,9 @@ public class ReservationService {
     private final UserRepository userRepository;
     private final AnimalHospitalRepository hospitalRepository;
     private final AnimalFuneralRepository funeralRepository;
+
+    private final AnimalHospitalService animalHospitalService;
+    private final AnimalFuneralService animalFuneralService;
 
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final DateTimeFormatter RES_NO_FMT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -102,7 +107,10 @@ public class ReservationService {
 
         reservationRepository.save(reservation);
 
-        return ReservationResDto.from(reservation);
+        Reservation saved = reservationRepository.findWithTargetsById(reservation.getId())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.INTERNAL_SERVER_ERROR));
+
+        return ReservationResDto.from(saved, calculateOpenNow(saved));
     }
 
 
@@ -113,7 +121,7 @@ public class ReservationService {
 
         return reservationRepository.findAllByUser_Id(userId)
                 .stream()
-                .map(ReservationResDto::from)
+                .map(r -> ReservationResDto.from(r, calculateOpenNow(r)))
                 .toList();
     }
 
@@ -124,7 +132,7 @@ public class ReservationService {
 
         validateReservationOwnerOrThrow(reservation, userId);
 
-        return ReservationResDto.from(reservation);
+        return ReservationResDto.from(reservation, calculateOpenNow(reservation));
     }
 
     // 예약 변경
@@ -184,7 +192,7 @@ public class ReservationService {
 
         reservation.update(dto);
 
-        return ReservationResDto.from(reservation);
+        return ReservationResDto.from(reservation, calculateOpenNow(reservation));
     }
 
     // 예약 취소
@@ -201,7 +209,7 @@ public class ReservationService {
 
         reservation.changeStatus(ReservationStatus.CANCELED);
 
-        return ReservationResDto.from(reservation);
+        return ReservationResDto.from(reservation, calculateOpenNow(reservation));
     }
 
 
@@ -220,7 +228,7 @@ public class ReservationService {
 
 
     private Reservation getReservationOrThrow(Long reservationId) {
-        return reservationRepository.findById(reservationId)
+        return reservationRepository.findWithTargetsById(reservationId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.RESERVATION_NOT_FOUND));
     }
 
@@ -242,6 +250,18 @@ public class ReservationService {
 
     private void throwTimeConflict() {
         throw new GeneralException(ErrorStatus.RESERVATION_TIME_CONFLICT);
+    }
+
+    private boolean calculateOpenNow(Reservation reservation) {
+        if (reservation.getTargetType() == TargetType.HOSPITAL) {
+            AnimalHospital hospital = reservation.getHospital();
+            return hospital != null && animalHospitalService.calculateOpenNow(hospital);
+        }
+        if (reservation.getTargetType() == TargetType.FUNERAL) {
+            AnimalFuneral funeral = reservation.getFuneral();
+            return funeral != null && animalFuneralService.calculateOpenNow(funeral);
+        }
+        return false;
     }
 
 }
