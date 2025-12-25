@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Slf4j
@@ -77,12 +78,11 @@ public class JwtFilter extends OncePerRequestFilter {
             res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
         }
 
-        Map<String, Object> body = Map.of(
-                "isSuccess", false,
-                "statusCode", code,
-                "message", message,
-                "result", null
-        );
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("isSuccess", false);
+        body.put("statusCode", code);
+        body.put("message", message);
+        body.put("result", null);
 
         res.getWriter().write(objectMapper.writeValueAsString(body));
     }
