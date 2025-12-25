@@ -4,6 +4,7 @@ import growthon.withtail_be.domain.review.entity.Review;
 import growthon.withtail_be.domain.review.entity.TargetType;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public record ReviewResDto(
         Long reviewId,
@@ -22,6 +23,8 @@ public record ReviewResDto(
         boolean isMine
 ) {
     public static ReviewResDto from(Review review, Long userId, String targetName) {
+        boolean isMine = (userId != null) && Objects.equals(review.getUser().getId(), userId);
+
         return new ReviewResDto(
                 review.getId(),
                 review.getTargetType(),
@@ -37,7 +40,7 @@ public record ReviewResDto(
                 review.getCreatedAt(),
                 review.getUpdatedAt(),
 
-                review.getUser().getId().equals(userId)
+                isMine
         );
     }
 }
