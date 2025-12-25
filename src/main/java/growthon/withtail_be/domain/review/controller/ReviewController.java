@@ -57,12 +57,10 @@ public class ReviewController {
                     """
     )
     public BaseResponse<List<ReviewResDto>> getReviewsByTarget(
-            Authentication authentication,
             @RequestParam TargetType targetType,
             @RequestParam Long targetId
     ) {
-        Long userId = Long.parseLong(authentication.getName());
-        List<ReviewResDto> res = reviewService.findByTarget(targetType, targetId, userId);
+        List<ReviewResDto> res = reviewService.findByTarget(targetType, targetId, null);
         return BaseResponse.onSuccess(SuccessStatus.REVIEW_LIST_GET_SUCCESS, res);
     }
 
