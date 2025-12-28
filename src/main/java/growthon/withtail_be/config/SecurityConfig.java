@@ -74,7 +74,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "http://localhost:5174",
-                "https://withtail.duckdns.org"
+                "https://withtail.duckdns.org",
+                "https://fe-gpdd.vercel.app/"
         ));      // 프론트주소
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
